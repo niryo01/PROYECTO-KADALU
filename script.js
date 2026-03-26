@@ -1,25 +1,11 @@
-// Importaciones con URL completa (CDN)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+// 1. Importamos la DB ya configurada desde nuestro archivo secreto
+import { db } from "./config.js";
+
+// 2. Importamos las funciones de Firestore que necesitamos aquí
 import {
-  getFirestore,
   collection,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-// Tu configuración (Esta perfecta)
-const firebaseConfig = {
-  apiKey: "AIzaSyC3IaV-chcCbTCbWNvHd_hn7_xMmW3oHMY",
-  authDomain: "kadalu-store.firebaseapp.com",
-  projectId: "kadalu-store",
-  storageBucket: "kadalu-store.firebasestorage.app",
-  messagingSenderId: "618731058734",
-  appId: "1:618731058734:web:6298e58bab3afeada091bf",
-  measurementId: "G-P8EVLF6KBZ",
-};
-
-// Inicializar Firebase y la DB
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 //Variables de interaccion con el DOM
 const CatalogoSeccion = document.getElementById("contenedor-productos");
