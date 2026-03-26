@@ -1,0 +1,112 @@
+:root {
+  --color-pink-logo: #ff66b2; /* El rosa vibrante del logo */
+  --color-dark-logo: #1e293b; /* El fondo oscuro mate del logo */
+  --color-white: #ffffff;
+  --color-grey-dark: #374151;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--color-dark-logo);
+  color: var(--color-white);
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilos personalizados para el Banner */
+.kadalu-banner {
+  background-color: var(
+    --color-dark-logo
+  ); /* Color de fondo mientras carga la imagen */
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid var(--color-pink-logo); /* Línea rosa de acento */
+}
+
+.kadalu-banner-image {
+  width: 100%;
+  height: auto;
+  max-height: 40vh; /* Para que el banner no sea Gigante en PC */
+  object-fit: cover; /* Recorta la imagen para llenar el espacio sin deformarse */
+  display: block;
+}
+
+/* En móvil, permitimos que sea un poco más alto proporcionalmente */
+@media screen and (max-width: 768px) {
+  .kadalu-banner-image {
+    max-height: 50vh;
+  }
+}
+
+/* Botones personalizados con el color del logo */
+.button.is-kadalu {
+  background-color: var(--color-pink-logo);
+  color: var(
+    --color-dark-logo
+  ); /* Texto oscuro sobre rosa para buen contraste */
+  border-color: var(--color-pink-logo);
+  transition: background-color 0.3s ease;
+}
+
+.button.is-kadalu:hover {
+  background-color: #ff3399; /* Un rosa un poco más oscuro al pasar el mouse */
+  color: var(--color-white);
+}
+
+/* Contenedor principal para la cuadrícula de productos */
+.product-grid {
+  margin-top: 2rem;
+  margin-bottom: 4rem; /* Espacio para la barra de proforma inferior */
+}
+
+/* Tarjeta de producto personalizada */
+.card.product-card {
+  background-color: var(--color-grey-dark);
+  color: var(--color-white);
+  border-radius: 8px;
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(255, 102, 178, 0.3); /* Resplandor rosa sutil */
+}
+
+.card.product-card .card-image img {
+  object-fit: cover;
+  aspect-ratio: 4 / 5; /* Ratio para mantener las tarjetas del mismo alto */
+}
+
+.card.product-card .card-content h3 {
+  font-size: 1.1rem;
+  color: var(--color-white);
+  margin-bottom: 0.5rem;
+}
+
+.card.product-card .card-content .price {
+  font-weight: bold;
+  color: var(--color-pink-logo);
+  font-size: 1.2rem;
+}
+
+/* Barra de Proforma Flotante (Inferior) */
+#proforma-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--color-white);
+  color: var(--color-dark-logo);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  padding: 10px 0;
+  border-top: 3px solid var(--color-pink-logo);
+  display: none; /* Se mostrará con JS más adelante */
+}
+
+#proforma-bar .level {
+  padding: 0 1.5rem;
+}
