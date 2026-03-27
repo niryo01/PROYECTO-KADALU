@@ -1,14 +1,15 @@
 // 1. Importamos la DB ya configurada desde nuestro archivo secreto
 import { db } from "./config.js";
 
+import { pintarCatalogoSeccion, configuracionLogin } from "./ui.js";
+
 // 2. Importamos las funciones de Firestore que necesitamos aquí
 import {
   collection,
   getDocs,
+  query,
+  where,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-//Variables de interaccion con el DOM
-const CatalogoSeccion = document.getElementById("contenedor-productos");
 
 //Función para consumir los datos
 async function cargarCatalogo() {
@@ -31,27 +32,29 @@ async function cargarCatalogo() {
 // Ejecutamos para obtener el catalogo de productos.
 cargarCatalogo();
 
-function pintarCatalogoSeccion(productos) {
-  CatalogoSeccion.innerHTML = "";
-  productos.forEach((producto) => {
-    CatalogoSeccion.innerHTML += `<div class="column is-6-mobile is-4-tablet is-3-desktop">
-            <div class="card product-card">
-              <div class="card-image">
-                <figure class="image is-4by5">
-                  <img
-                    src="${producto.img}"
-                    alt="${producto.nombre}"
-                  />
-                </figure>
-              </div>
-              <div class="card-content">
-                <h3 class="has-text-weight-semibold">${producto.nombre}</h3>
-                <p class="price">${Number(producto.precio).toFixed(2)}</p>
-                <button class="button is-kadalu is-fullwidth mt-3"  data-id="${producto.id}" data-precio="${producto.precio}">
-                  Agregar
-                </button>
-              </div>
-            </div>
-          </div>`;
-  });
+async function loginValidacion(usuarioIngresado, contraseñaIngresada) {
+  try {
+    //armamos la referencia y le decimos donde queremos buscar
+    const usuariosReferencia = collection(db, "usuarios");
+    // Armamos la consulta: "Busca en la colección usuarios donde el campo 'usuario' sea igual a lo ingresado Y 'contraseña' sea igual a lo ingresado"
+    const consulta = query(
+      usuariosReferencia,
+      where("usuario", "==", usuarioIngresado),
+      where("contraseña", "==", contraseñaIngresada),
+    );
+
+    //disparamos la accion en una variable
+    const resultados = await getDocs(consulta);
+
+    if (resultados.empty) {
+      console.log("epic fail");
+    } else {
+      console.log("Bienvenido");
+      window.location.href = "admin.html";
+    }
+  } catch (error) {
+    console.log("error fatal");
+  }
 }
+
+configuracionLogin(loginValidacion);

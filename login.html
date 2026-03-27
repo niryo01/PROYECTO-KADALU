@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Kadalu Store</title>
+    <script type="module" src="script.js"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+
+    <style>
+      :root {
+        --color-pink-logo: #ff66b2;
+        --color-pink-hover: #ff3399;
+        --color-dark-bg: #0f172a; /* Fondo principal muy oscuro */
+        --color-card-bg: #1e293b; /* Fondo de la tarjeta un poco más claro */
+        --color-white: #ffffff;
+        --color-grey-light: #9ca3af;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: var(--color-dark-bg);
+        height: 100vh; /* Ocupa toda la altura de la pantalla */
+        display: flex; /* Centra el contenido vertical y horizontalmente */
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+      }
+
+      /* Tarjeta contenedora del login */
+      .login-card {
+        background-color: var(--color-card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px; /* Bordes redondeados modernos */
+        padding: 2.5rem 2rem;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra profunda */
+      }
+
+      .login-title {
+        color: var(--color-white);
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .login-title span {
+        color: var(--color-pink-logo); /* Detalle de color en el título */
+      }
+
+      /* Estilizando los inputs de Bulma para tema oscuro */
+      .input.is-kadalu {
+        background-color: rgba(15, 23, 42, 0.5);
+        border-color: #374151;
+        color: var(--color-white);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .input.is-kadalu:focus {
+        border-color: var(--color-pink-logo);
+        box-shadow: 0 0 0 0.125em rgba(255, 102, 178, 0.25); /* Resplandor rosa al hacer clic */
+      }
+
+      .input.is-kadalu::placeholder {
+        color: var(--color-grey-light);
+      }
+
+      .label.is-kadalu {
+        color: var(--color-white);
+        font-weight: 400;
+        font-size: 0.9rem;
+      }
+
+      /* Botón principal */
+      .button.is-kadalu-btn {
+        background: linear-gradient(
+          135deg,
+          var(--color-pink-logo),
+          var(--color-pink-hover)
+        );
+        color: var(--color-white);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+      }
+
+      .button.is-kadalu-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(255, 102, 178, 0.3);
+        color: var(--color-white);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-card">
+      <h2 class="title is-4 login-title">Ingresar a <span>Kadalu</span></h2>
+
+      <form id="login-form">
+        <div class="field">
+          <label class="label is-kadalu">Usuario</label>
+          <div class="control">
+            <input
+              class="input is-kadalu"
+              type="text"
+              id="username"
+              placeholder="Ingresa tu usuario"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label is-kadalu">Contraseña</label>
+          <div class="control">
+            <input
+              class="input is-kadalu"
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="control">
+          <button type="submit" class="button is-fullwidth is-kadalu-btn">
+            Iniciar Sesión
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

@@ -9,28 +9,32 @@
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
     <script type="module" src="script.js" defer></script>
   </head>
   <body>
-    <section class="kadalu-banner">
+    <section class="kadalu-hero">
+      <div class="hero-overlay"></div>
       <img
-        src="https://via.placeholder.com/1920x600/1e293b/ff66b2?text=KADALU+STORE+BANNER+(Carga+tu+imagen)"
+        src="imagenes/kadalu.jpg"
         alt="Kadalu Store Banner"
-        class="kadalu-banner-image"
+        class="hero-bg"
       />
+      <div class="hero-content">
+        <h1 class="title is-1 has-text-white has-text-weight-bold">
+          Novedades de la Semana
+        </h1>
+        <p class="subtitle is-5 mt-3" style="color: var(--color-pink-logo)">
+          Arma tu pedido y envíalo por WhatsApp
+        </p>
+      </div>
     </section>
 
     <main class="section">
       <div class="container">
-        <div class="has-text-centered mb-5">
-          <h1 class="title is-2" style="color: var(--color-white)">
-            Novedades de la Semana
-          </h1>
-          <p class="subtitle is-5" style="color: var(--color-pink-logo)">
-            Arma tu pedido y envíalo por WhatsApp
-          </p>
-        </div>
-
         <div
           id="contenedor-productos"
           class="product-grid columns is-multiline is-mobile"
@@ -38,27 +42,20 @@
       </div>
     </main>
 
-    <div id="proforma-bar">
-      <div class="container">
-        <div class="level is-mobile">
-          <div class="level-left">
-            <div class="level-item">
-              <p class="is-size-5 has-text-weight-bold">
-                Total:
-                <span id="monto-total" class="has-text-weight-extrabold"
-                  >S/ 0.00</span
-                >
-              </p>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <button id="btn-whatsapp" class="button is-success is-kadalu">
-                Pedir por WhatsApp (S/ <span id="cantidad-items">0</span>)
-              </button>
-            </div>
-          </div>
+    <div id="proforma-bar" class="proforma-floating">
+      <div class="proforma-content">
+        <div class="proforma-info">
+          <p class="is-size-7 has-text-grey-light mb-0">Total a pagar</p>
+          <p class="is-size-4 has-text-weight-bold has-text-white mb-0">
+            <span id="monto-total">S/ 0.00</span>
+          </p>
         </div>
+        <button
+          id="btn-whatsapp"
+          class="button is-kadalu is-rounded has-text-weight-bold shadow-pink"
+        >
+          <span>Pedir (S/ <span id="cantidad-items">0</span>)</span>
+        </button>
       </div>
     </div>
   </body>
