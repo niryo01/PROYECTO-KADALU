@@ -4,9 +4,265 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script type="module" src="script.js"></script>
+    <script type="module" src="controllers/adminController.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>ingresaste</h1>
+    <main class="section">
+      <div class="container">
+        <div class="level dashboard-header mb-6">
+          <div class="level-left">
+            <div class="level-item">
+              <h1 class="title is-3 has-text-white has-text-weight-bold mb-0">
+                Panel de Control
+              </h1>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item buttons">
+              <button
+                id="btn-open-edit"
+                class="button is-kadalu-btn is-outlined-pink"
+              >
+                Editar Producto
+              </button>
+              <button id="btn-open-add" class="button is-kadalu-btn">
+                Nuevo Producto
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal" id="modal-add-product">
+      <div class="modal-background"></div>
+      <div class="modal-card kadalu-modal">
+        <header class="modal-card-head">
+          <p class="modal-card-title has-text-white has-text-weight-bold">
+            Registrar Nuevo Producto
+          </p>
+          <button class="delete" aria-label="close" id="btn-close-add"></button>
+        </header>
+
+        <section class="modal-card-body">
+          <form id="form-add">
+            <div class="field">
+              <label class="label is-kadalu">Imagen del Producto</label>
+              <div class="control">
+                <input
+                  class="input is-kadalu kadalu-file"
+                  type="file"
+                  accept="image/*"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label is-kadalu">Nombre del Producto</label>
+              <div class="control">
+                <input
+                  class="input is-kadalu"
+                  type="text"
+                  placeholder="Ej. Polo Oversize Negro"
+                />
+              </div>
+            </div>
+
+            <div class="columns is-mobile mb-0">
+              <div class="column">
+                <div class="field">
+                  <label class="label is-kadalu">Precio (S/)</label>
+                  <div class="control">
+                    <input
+                      class="input is-kadalu"
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="column">
+                <div class="field">
+                  <label class="label is-kadalu">Stock</label>
+                  <div class="control">
+                    <input
+                      class="input is-kadalu"
+                      type="number"
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label is-kadalu">Categoría</label>
+              <div class="control">
+                <div class="select is-fullwidth is-kadalu-select">
+                  <select>
+                    <option value="">Selecciona una categoría...</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label is-kadalu">Sub-categoría</label>
+              <div class="control">
+                <div class="select is-fullwidth is-kadalu-select">
+                  <select>
+                    <option value="">Selecciona una sub-categoría...</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label is-kadalu">Sub-subcategoría</label>
+              <div class="control">
+                <div class="select is-fullwidth is-kadalu-select">
+                  <select>
+                    <option value="">Selecciona una sub-subcategoría...</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <footer class="modal-card-foot is-justify-content-flex-end">
+          <button
+            class="button is-ghost has-text-grey-light"
+            id="btn-cancel-add"
+          >
+            Cancelar
+          </button>
+          <button class="button is-kadalu-btn" type="submit" form="form-add">
+            Guardar Producto
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-edit-product">
+      <div class="modal-background"></div>
+      <div class="modal-card kadalu-modal">
+        <header class="modal-card-head">
+          <p class="modal-card-title has-text-white has-text-weight-bold">
+            Editar Producto
+          </p>
+          <button
+            class="delete"
+            aria-label="close"
+            id="btn-close-edit"
+          ></button>
+        </header>
+
+        <section class="modal-card-body">
+          <form id="form-edit">
+            <div class="field">
+              <label class="label is-kadalu">Actualizar Imagen</label>
+              <div class="control">
+                <input
+                  class="input is-kadalu kadalu-file"
+                  type="file"
+                  accept="image/*"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label is-kadalu">Nombre del Producto</label>
+              <div class="control">
+                <input
+                  class="input is-kadalu"
+                  type="text"
+                  placeholder="Ej. Polo Oversize Negro"
+                />
+              </div>
+            </div>
+
+            <div class="columns is-mobile mb-0">
+              <div class="column">
+                <div class="field">
+                  <label class="label is-kadalu">Precio (S/)</label>
+                  <div class="control">
+                    <input
+                      class="input is-kadalu"
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="column">
+                <div class="field">
+                  <label class="label is-kadalu">Stock</label>
+                  <div class="control">
+                    <input
+                      class="input is-kadalu"
+                      type="number"
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label is-kadalu">Categoría</label>
+              <div class="control">
+                <div class="select is-fullwidth is-kadalu-select">
+                  <select>
+                    <option value="">Selecciona...</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label is-kadalu">Sub-categoría</label>
+              <div class="control">
+                <div class="select is-fullwidth is-kadalu-select">
+                  <select>
+                    <option value="">Selecciona...</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label is-kadalu">Sub-subcategoría</label>
+              <div class="control">
+                <div class="select is-fullwidth is-kadalu-select">
+                  <select>
+                    <option value="">Selecciona...</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <footer class="modal-card-foot is-justify-content-flex-end">
+          <button
+            class="button is-ghost has-text-grey-light"
+            id="btn-cancel-edit"
+          >
+            Cancelar
+          </button>
+          <button class="button is-kadalu-btn" type="submit" form="form-edit">
+            Actualizar Cambios
+          </button>
+        </footer>
+      </div>
+    </div>
   </body>
 </html>
