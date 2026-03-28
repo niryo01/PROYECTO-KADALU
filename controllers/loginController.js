@@ -16,7 +16,6 @@ async function manejarLogin(usuario, contraseña) {
       console.log("Credenciales inválidas");
       alert("Usuario o contraseña incorrectos. Inténtalo otra vez.");
     }
-
   } catch (error) {
     console.error("Fallo durante el login:", error);
     alert("Hubo un error en la conexión. Inténtalo más tarde.");

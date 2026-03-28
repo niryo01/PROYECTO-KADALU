@@ -14,11 +14,11 @@ export async function obtenerProductos() {
   console.log("Intentando conectar a Firebase para obtener productos...");
   try {
     const productosRef = collection(db, "productos");
-    const querySnapshot = await getDocs(productosRef); 
+    const querySnapshot = await getDocs(productosRef);
 
     const productos = querySnapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data(), 
+      ...doc.data(),
     }));
     return productos; // Retornamos los datos al Controlador
   } catch (error) {

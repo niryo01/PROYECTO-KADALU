@@ -24,14 +24,14 @@
           </div>
           <div class="level-right">
             <div class="level-item buttons">
+              <button id="btn-open-add" class="button is-kadalu-btn">
+                Nuevo Producto
+              </button>
               <button
                 id="btn-open-edit"
                 class="button is-kadalu-btn is-outlined-pink"
               >
                 Editar Producto
-              </button>
-              <button id="btn-open-add" class="button is-kadalu-btn">
-                Nuevo Producto
               </button>
             </div>
           </div>
@@ -58,6 +58,7 @@
                   class="input is-kadalu kadalu-file"
                   type="file"
                   accept="image/*"
+                  id="añadir-imagen-Producto"
                 />
               </div>
             </div>
@@ -69,6 +70,7 @@
                   class="input is-kadalu"
                   type="text"
                   placeholder="Ej. Polo Oversize Negro"
+                  id="añadir-nombre-Producto"
                 />
               </div>
             </div>
@@ -83,6 +85,7 @@
                       type="number"
                       step="0.01"
                       placeholder="0.00"
+                      id="añadir-precio-producto"
                     />
                   </div>
                 </div>
@@ -95,6 +98,7 @@
                       class="input is-kadalu"
                       type="number"
                       placeholder="0"
+                      id="añadir-stock-producto"
                     />
                   </div>
                 </div>
@@ -105,7 +109,7 @@
               <label class="label is-kadalu">Categoría</label>
               <div class="control">
                 <div class="select is-fullwidth is-kadalu-select">
-                  <select>
+                  <select id="añadir-categoria-producto">
                     <option value="">Selecciona una categoría...</option>
                   </select>
                 </div>
@@ -116,7 +120,7 @@
               <label class="label is-kadalu">Sub-categoría</label>
               <div class="control">
                 <div class="select is-fullwidth is-kadalu-select">
-                  <select>
+                  <select id="añadir-subcategoria-producto">
                     <option value="">Selecciona una sub-categoría...</option>
                   </select>
                 </div>
@@ -127,7 +131,7 @@
               <label class="label is-kadalu">Sub-subcategoría</label>
               <div class="control">
                 <div class="select is-fullwidth is-kadalu-select">
-                  <select>
+                  <select id="añadir-sub-subcategoria-producto">
                     <option value="">Selecciona una sub-subcategoría...</option>
                   </select>
                 </div>
