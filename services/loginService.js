@@ -10,7 +10,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Servicio que únicamente interactúa con DB y devuelve un booleano (Modelo Puro)
-export async function validarCredenciales(usuarioIngresado, contraseñaIngresada) {
+export async function validarCredenciales(
+  usuarioIngresado,
+  contraseñaIngresada,
+) {
   try {
     const usuariosReferencia = collection(db, "usuarios");
     const consulta = query(
@@ -23,7 +26,7 @@ export async function validarCredenciales(usuarioIngresado, contraseñaIngresada
 
     // Si está vacío, las credenciales son incorrectas
     if (resultados.empty) {
-      return false; 
+      return false;
     } else {
       return true; // Credenciales correctas
     }
