@@ -28,14 +28,29 @@
               <button id="btn-open-add" class="button is-kadalu-btn">
                 Nuevo Producto
               </button>
-              <button
-                id="btn-open-edit"
-                class="button is-kadalu-btn is-outlined-pink"
-              >
-                Editar Producto
-              </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="table-container">
+          <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Precio (S/)</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th>Sub-categoría</th>
+                <th>Sub-subcategoría</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="product-table-body"></tbody>
+          </table>
         </div>
       </div>
     </main>
@@ -160,7 +175,7 @@
       <div class="modal-card kadalu-modal">
         <header class="modal-card-head">
           <p class="modal-card-title has-text-white has-text-weight-bold">
-            Editar Producto
+            Editar
           </p>
           <button
             class="delete"
@@ -178,6 +193,7 @@
                   class="input is-kadalu kadalu-file"
                   type="file"
                   accept="image/*"
+                  id="editar-imagen-producto"
                 />
               </div>
             </div>
@@ -189,6 +205,7 @@
                   class="input is-kadalu"
                   type="text"
                   placeholder="Ej. Polo Oversize Negro"
+                  id="editar-nombre-producto"
                 />
               </div>
             </div>
@@ -203,6 +220,7 @@
                       type="number"
                       step="0.01"
                       placeholder="0.00"
+                      id="editar-precio-producto"
                     />
                   </div>
                 </div>
@@ -215,6 +233,7 @@
                       class="input is-kadalu"
                       type="number"
                       placeholder="0"
+                      id="editar-stock-producto"
                     />
                   </div>
                 </div>
@@ -225,7 +244,7 @@
               <label class="label is-kadalu">Categoría</label>
               <div class="control">
                 <div class="select is-fullwidth is-kadalu-select">
-                  <select>
+                  <select id="editar-categoria-producto">
                     <option value="">Selecciona...</option>
                   </select>
                 </div>
@@ -236,7 +255,7 @@
               <label class="label is-kadalu">Sub-categoría</label>
               <div class="control">
                 <div class="select is-fullwidth is-kadalu-select">
-                  <select>
+                  <select id="editar-subcategoria-producto">
                     <option value="">Selecciona...</option>
                   </select>
                 </div>
@@ -247,7 +266,7 @@
               <label class="label is-kadalu">Sub-subcategoría</label>
               <div class="control">
                 <div class="select is-fullwidth is-kadalu-select">
-                  <select>
+                  <select id="editar-subsubcategoria-producto">
                     <option value="">Selecciona...</option>
                   </select>
                 </div>

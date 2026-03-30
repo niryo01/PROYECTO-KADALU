@@ -4,6 +4,12 @@ const formularioAñadir = document.getElementById("form-add");
 const botonCerrarModalAñadir = document.getElementById("btn-close-add");
 const botonCancelarModalAñadir = document.getElementById("btn-cancel-add");
 
+const tablaProductos = document.getElementById("product-table-body");
+const modalEditar = document.getElementById("modal-edit-product");
+const botonCerrarModalEditar = document.getElementById("btn-close-edit");
+const formularioEditar = document.getElementById("form-edit");
+const botonCancelarModalEditar = document.getElementById("btn-cancel-edit");
+
 const añadirImagenProducto = document.getElementById("añadir-imagen-producto");
 const añadirNombreProducto = document.getElementById("añadir-nombre-producto");
 const añadirPrecioProducto = document.getElementById("añadir-precio-producto");
@@ -18,6 +24,20 @@ const añadirSubSubcategoriaProducto = document.getElementById(
   "añadir-sub-subcategoria-producto",
 );
 
+const editarImagenProducto = document.getElementById("editar-imagen-producto");
+const editarNombreProducto = document.getElementById("editar-nombre-producto");
+const editarPrecioProducto = document.getElementById("editar-precio-producto");
+const editarStockProducto = document.getElementById("editar-stock-producto");
+const editarCategoriaProducto = document.getElementById(
+  "editar-categoria-producto",
+);
+const editarSubcategoriaProducto = document.getElementById(
+  "editar-subcategoria-producto",
+);
+const editarSubSubcategoriaProducto = document.getElementById(
+  "editar-subsubcategoria-producto",
+);
+
 //funcion que abre o cierra el modal
 export function iniciarModal() {
   botonAbrirModalAñadir.addEventListener("click", function () {
@@ -29,8 +49,16 @@ export function iniciarModal() {
     //si esta, la quita, si no, la pone, xd
   });
 
+  botonCerrarModalEditar.addEventListener("click", function () {
+    modalEditar.classList.toggle("is-active");
+  });
+
   botonCancelarModalAñadir.addEventListener("click", function () {
     modalAñadir.classList.toggle("is-active");
+  });
+
+  botonCancelarModalEditar.addEventListener("click", function () {
+    modalEditar.classList.toggle("is-active");
   });
 }
 
@@ -93,6 +121,112 @@ export function obtenerDatosFormularioAñadir(funcionCallback) {
       Swal.fire({
         title: "Error!",
         text: "No se pudo subir a la nube. Intenta de nuevo",
+        icon: "error",
+        confirmButtonText: "Okay",
+      });
+    }
+  });
+}
+
+export function pintarTablaProductosAdmin(listaProductos) {
+  tablaProductos.innerHTML = "";
+  listaProductos.forEach((producto) => {
+    tablaProductos.innerHTML += `<tr> <td>${producto.id}</td> <td><img src="${producto.img}" 
+    alt="${producto.nombre}" width="100"></td> <td>${producto.nombre}</td> 
+    <td>${producto.precio}</td> <td>${producto.stock}</td> 
+    <td>${producto.categoria}</td> <td>${producto.subcategoria}</td> 
+    <td>${producto.subsubcategoria || "N/A"}</td> 
+    <td> <button class="button btn-editar is-primary is-small" data-id="${producto.id}">Editar</button> <button class="button is-danger is-small" data-id="${producto.id}">Eliminar</button> </td>
+    </tr>`;
+  });
+
+  const botonesEditar = document.querySelectorAll(".btn-editar");
+  botonesEditar.forEach((boton) => {
+    boton.addEventListener("click", function (e) {
+      //capturamos el id con ayuda del boton (porque este ya contiene el id)
+      //recordemos que "e" toma el elemento exacto al que le das click
+      const idProdSeleccionado = e.currentTarget.dataset.id;
+
+      //ahora que tenemos el id capturado solo lo buscamos
+      const ProductoSeleccionadoEditar = listaProductos.find(
+        (producto) => producto.id == idProdSeleccionado,
+      );
+
+      //ahora hacemos que en el modal carguen todos los datos del producto a editar (para justamente proceder a editarlos y reemplazarlos)
+      editarNombreProducto.value = ProductoSeleccionadoEditar.nombre;
+      editarPrecioProducto.value = ProductoSeleccionadoEditar.precio;
+      editarStockProducto.value = ProductoSeleccionadoEditar.stock;
+      editarCategoriaProducto.value = ProductoSeleccionadoEditar.categoria;
+      editarSubcategoriaProducto.value =
+        ProductoSeleccionadoEditar.subcategoria;
+      editarSubSubcategoriaProducto.value =
+        ProductoSeleccionadoEditar.subsubcategoria || ""; //si no tiene subsubcategoria, que deje el campo vacio
+
+      /* Ahora le asignamos el id tambien al formulario, esto porque al ejecutar el evento "submit", el formulario
+debe saber exactamente que producto esta editando para no confundirse, y para que eso ocurra, debemos
+asegurarnos que el formulario conoce el ID del producto que esta editando, asi que le asignamos el id
+con el dataset */
+      formularioEditar.dataset.id = idProdSeleccionado;
+      //el modal aparece al final para que salga con todos los datos ya cargados
+      modalEditar.classList.add("is-active");
+    });
+  });
+}
+
+export function obtenerDatosFormularioEditar(funcionCallBack) {
+  formularioEditar.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    // de nuevo atrapamos el ID
+    const idProductoEditar = formularioEditar.dataset.id;
+
+    // creamos el nuevo producto esta vez editado, pero que conserva su ID
+    const productoEditado = {
+      nombre: editarNombreProducto.value,
+      precio: Number(editarPrecioProducto.value),
+      stock: Number(editarStockProducto.value),
+      categoria: editarCategoriaProducto.value,
+      subcategoria: editarSubcategoriaProducto.value,
+      subsubcategoria: editarSubSubcategoriaProducto.value || "",
+    };
+
+    //esta condicional es obligatoria para manejar si es que se subio una nueva imagen
+    if (editarImagenProducto.files.length > 0) {
+      //recordemos que los inputs para imagenes funcionan como array, asi que si reconoce que el array
+      //es diferente de 0 (osea se agrego al nuevo) se le añade como nuevo atributo al objeto
+      productoEditado.imgUpd = editarImagenProducto.files[0];
+    } else {
+      //si no hay nada seleccionado simplemente no se sube nada, le decimos que no hay nada nuevo
+      productoEditado.imgUpd = null;
+    }
+
+    Swal.fire({
+      title: "Cargando",
+      text: "Editando producto...",
+      allowOutsideClick: false, // Evita que el usuario lo cierre dando clic afuera
+      showConfirmButton: false, // Ocultamos el botón porque solo deben esperar
+      didOpen: () => {
+        Swal.showLoading(); // ¡Esta es la línea mágica que hace aparecer la ruedita!
+      },
+    });
+
+    const huboExito = await funcionCallBack(idProductoEditar, productoEditado);
+    if (huboExito === true) {
+      Swal.fire({
+        title: "Producto Editado!",
+        text: "La informacion se actualizo correctamente",
+        icon: "success",
+        confirmButtonText: "Okay",
+      }).then(() => {
+        // Todo lo que esté aquí adentro ocurrirá CUANDO el usuario haga clic en "Okay"
+        window.location.reload(); // Recarga la página automáticamente
+      });
+      formularioEditar.reset();
+      modalEditar.classList.toggle("is-active");
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: "No se pudo actualizar el producto. Intenta de nuevo",
         icon: "error",
         confirmButtonText: "Okay",
       });
