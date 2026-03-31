@@ -114,6 +114,7 @@ export async function editarProductoBaseDatos(idProducto, productoEditado) {
   }
 }
 
+//FUNCION PARA ELIMINAR PRODUCTO
 export async function eliminarProducto(idProducto) {
   try {
     const refProducto = doc(db, "productos", idProducto);

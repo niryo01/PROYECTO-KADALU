@@ -4,7 +4,7 @@ const formularioAñadir = document.getElementById("form-add");
 const botonCerrarModalAñadir = document.getElementById("btn-close-add");
 const botonCancelarModalAñadir = document.getElementById("btn-cancel-add");
 
-const tablaProductos = document.getElementById("product-table-body");
+let tablaProductos = document.getElementById("product-table-body");
 const modalEditar = document.getElementById("modal-edit-product");
 const botonCerrarModalEditar = document.getElementById("btn-close-edit");
 const formularioEditar = document.getElementById("form-edit");
@@ -128,30 +128,36 @@ export function obtenerDatosFormularioAñadir(funcionCallback) {
   });
 }
 
-export function pintarTablaProductosAdmin(listaProductos) {
+export function pintarTablaProductosAdmin(listaProductos, funcionEliminar) {
+  //vaciamos la el html para que se vuelva a pintar correctamente
   tablaProductos.innerHTML = "";
+  //pintamos el HTML de la tabla
   listaProductos.forEach((producto) => {
     tablaProductos.innerHTML += `<tr> <td>${producto.id}</td> <td><img src="${producto.img}" 
     alt="${producto.nombre}" width="100"></td> <td>${producto.nombre}</td> 
     <td>${producto.precio}</td> <td>${producto.stock}</td> 
     <td>${producto.categoria}</td> <td>${producto.subcategoria}</td> 
     <td>${producto.subsubcategoria || "N/A"}</td> 
-    <td> <button class="button btn-editar is-primary is-small" data-id="${producto.id}">Editar</button> <button class="button is-danger is-small" data-id="${producto.id}">Eliminar</button> </td>
+    <td class="acciones-seccion"> <button class="button btn-editar is-primary is-small" data-id="${producto.id}">Editar</button> <button class="button btn-eliminar is-danger is-small" data-id="${producto.id}">Eliminar</button> </td>
     </tr>`;
   });
 
-  const botonesEditar = document.querySelectorAll(".btn-editar");
-  botonesEditar.forEach((boton) => {
-    boton.addEventListener("click", function (e) {
-      //capturamos el id con ayuda del boton (porque este ya contiene el id)
-      //recordemos que "e" toma el elemento exacto al que le das click
-      const idProdSeleccionado = e.currentTarget.dataset.id;
+  //______requiere explicacion
+  const tablaLimpia = tablaProductos.cloneNode(true);
+  tablaProductos.parentNode.replaceChild(tablaLimpia, tablaProductos);
+  tablaProductos = tablaLimpia; // <-- ¡AÑADE ESTA LÍNEA!
+  //____________________________
 
-      //ahora que tenemos el id capturado solo lo buscamos
+  // 3. Le ponemos la oreja nueva a la tabla limpia
+  tablaLimpia.addEventListener("click", function (e) {
+    const botonEditar = e.target.closest(".btn-editar");
+    const botonEliminar = e.target.closest(".btn-eliminar");
+
+    if (botonEditar) {
+      const idProdSeleccionado = botonEditar.dataset.id;
       const ProductoSeleccionadoEditar = listaProductos.find(
         (producto) => producto.id == idProdSeleccionado,
       );
-
       //ahora hacemos que en el modal carguen todos los datos del producto a editar (para justamente proceder a editarlos y reemplazarlos)
       editarNombreProducto.value = ProductoSeleccionadoEditar.nombre;
       editarPrecioProducto.value = ProductoSeleccionadoEditar.precio;
@@ -161,15 +167,73 @@ export function pintarTablaProductosAdmin(listaProductos) {
         ProductoSeleccionadoEditar.subcategoria;
       editarSubSubcategoriaProducto.value =
         ProductoSeleccionadoEditar.subsubcategoria || ""; //si no tiene subsubcategoria, que deje el campo vacio
-
       /* Ahora le asignamos el id tambien al formulario, esto porque al ejecutar el evento "submit", el formulario
-debe saber exactamente que producto esta editando para no confundirse, y para que eso ocurra, debemos
-asegurarnos que el formulario conoce el ID del producto que esta editando, asi que le asignamos el id
-con el dataset */
+      debe saber exactamente que producto esta editando para no confundirse, y para que eso ocurra, debemos
+      asegurarnos que el formulario conoce el ID del producto que esta editando, asi que le asignamos el id
+      con el dataset */
       formularioEditar.dataset.id = idProdSeleccionado;
       //el modal aparece al final para que salga con todos los datos ya cargados
       modalEditar.classList.add("is-active");
-    });
+    } else if (botonEliminar) {
+      const idProdSeleccionado = botonEliminar.dataset.id;
+      const ProductoSeleccionadoEliminar = listaProductos.find(
+        (p) => p.id == idProdSeleccionado,
+      );
+
+      console.log("A punto de eliminar:", ProductoSeleccionadoEliminar);
+      Swal.fire({
+        title: "Estas seguro?",
+        text: "Una vez eliminado el producto no podras deshacer este cambio!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar producto",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Estas 100% seguro?",
+            text: "Queremos asegurarnos que realmente querias eliminarlo!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si, quiero eliminarlo definitivamente!",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "Cargando",
+                text: "Eliminando producto...",
+                allowOutsideClick: false, // Evita que el usuario lo cierre dando clic afuera
+                showConfirmButton: false, // Ocultamos el botón porque solo deben esperar
+                didOpen: () => {
+                  Swal.showLoading(); // ¡Esta es la línea mágica que hace aparecer la ruedita!
+                },
+              });
+              const huboExito = await funcionEliminar(idProdSeleccionado);
+              if (huboExito === true) {
+                Swal.fire({
+                  title: "Producto Eliminado!",
+                  text: "El producto ha sido eliminado correctamente",
+                  icon: "success",
+                  confirmButtonText: "Okay",
+                }).then(() => {
+                  // Todo lo que esté aquí adentro ocurrirá CUANDO el usuario haga clic en "Okay"
+                  window.location.reload(); // Recarga la página automáticamente
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: "No se pudo eliminar el producto. Intenta de nuevo",
+                  icon: "error",
+                  confirmButtonText: "Okay",
+                });
+              }
+            }
+          });
+        }
+      });
+    }
   });
 }
 

@@ -1,6 +1,7 @@
 import {
   añadirProductoBaseDatos,
   editarProductoBaseDatos,
+  eliminarProducto,
   obtenerProductos,
 } from "../services/productosService.js";
 import {
@@ -15,6 +16,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   //funciones
   iniciarModal();
   obtenerDatosFormularioAñadir(añadirProductoBaseDatos);
-  pintarTablaProductosAdmin(productos);
+  pintarTablaProductosAdmin(productos, eliminarProducto);
   obtenerDatosFormularioEditar(editarProductoBaseDatos);
 });
