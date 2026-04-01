@@ -1,3 +1,5 @@
+//----------------------------------------VARIABLES DEL DOM-------------------------------------------
+
 const botonAbrirModalAñadir = document.getElementById("btn-open-add");
 const modalAñadir = document.getElementById("modal-add-product");
 const formularioAñadir = document.getElementById("form-add");
@@ -37,6 +39,8 @@ const editarSubcategoriaProducto = document.getElementById(
 const editarSubSubcategoriaProducto = document.getElementById(
   "editar-subsubcategoria-producto",
 );
+
+//----------------------------------------------FUNCIONES-----------------------------------------------
 
 //funcion que abre o cierra el modal
 export function iniciarModal() {
@@ -113,6 +117,10 @@ export function obtenerDatosFormularioAñadir(funcionCallback) {
         text: "El producto ha sido agregado correctamente",
         icon: "success",
         confirmButtonText: "Genial",
+        // Recarga la página automáticamente
+      }).then(() => {
+        // Todo lo que esté aquí adentro ocurrirá CUANDO el usuario haga clic en "Okay"
+        window.location.reload(); // Recarga la página automáticamente
       });
       formularioAñadir.reset(); //esto elimina los campos, es una ayudita de JS para cuando usamos forms
       modalAñadir.classList.toggle("is-active");
@@ -128,7 +136,38 @@ export function obtenerDatosFormularioAñadir(funcionCallback) {
   });
 }
 
+export function pantallaCargaProductos() {
+  const contenedor = document.querySelector(".table-container");
+  contenedor.innerHTML = `
+    <div class="has-text-centered p-5">
+      <i class="fas fa-spinner fa-spin is-size-2"></i> 
+      <p class="mt-3 is-size-5">Cargando catálogo de productos...</p>
+    </div>
+  `;
+  contenedor.classList.add("animate__animated", "animate__fadeInUp");
+}
+
+export function pintarTabla() {
+  const tablaContenedor = document.querySelector(".table-container");
+  tablaContenedor.innerHTML = `<table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Precio (S/)</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th>Sub-categoría</th>
+                <th>Sub-subcategoría</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="product-table-body"></tbody>
+          </table>`;
+}
 export function pintarTablaProductosAdmin(listaProductos, funcionEliminar) {
+  tablaProductos = document.getElementById("product-table-body");
   //vaciamos la el html para que se vuelva a pintar correctamente
   tablaProductos.innerHTML = "";
   //pintamos el HTML de la tabla

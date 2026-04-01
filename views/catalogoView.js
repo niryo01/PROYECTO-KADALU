@@ -1,8 +1,12 @@
+//---------------------VARIABLES GLOBALES
+
+const modalLateralFiltros = document.getElementById("modal-filtros");
+
 // Función responsable de pintar datos en HTML (Vista Pura)
 export function pintarCatalogoSeccion(productos, contenedorHtml) {
   // Limpiamos contenido previo
   contenedorHtml.innerHTML = "";
-  
+
   productos.forEach((producto) => {
     contenedorHtml.innerHTML += `
           <div class="column is-6-mobile is-4-tablet is-3-desktop">
@@ -24,5 +28,18 @@ export function pintarCatalogoSeccion(productos, contenedorHtml) {
               </div>
             </div>
           </div>`;
+  });
+}
+
+export function funcionBotonFiltros() {
+  document.addEventListener("click", function (e) {
+    const botonAbrirModalFiltros = e.target.closest("#btn-abrir-filtros");
+    const botonCerrarModalFiltros = e.target.closest("#btn-cerrar-filtros");
+    const backgroundCerrarModalFiltros = e.target.closest("#bg-cerrar-filtros");
+    if (botonAbrirModalFiltros) {
+      modalLateralFiltros.classList.add("is-active");
+    } else if (botonCerrarModalFiltros || backgroundCerrarModalFiltros) {
+      modalLateralFiltros.classList.remove("is-active");
+    }
   });
 }

@@ -36,6 +36,15 @@
         </p>
       </div>
     </section>
+    <div class="container mb-4 px-3">
+      <button
+        id="btn-abrir-filtros"
+        class="button is-dark is-outlined is-rounded"
+      >
+        <span class="icon is-small"><i class="fas fa-sliders-h"></i></span>
+        <span class="has-text-weight-semibold">Filtrar Catálogo</span>
+      </button>
+    </div>
 
     <main class="section">
       <div class="container">
@@ -60,6 +69,79 @@
         >
           <span>Pedir (S/ <span id="cantidad-items">0</span>)</span>
         </button>
+      </div>
+    </div>
+
+    <div id="modal-filtros" class="modal modal-lateral">
+      <div class="modal-background" id="bg-cerrar-filtros"></div>
+
+      <div class="modal-card lateral-panel">
+        <header
+          class="modal-card-head is-radiusless has-background-white"
+          style="border-bottom: 1px solid #eee"
+        >
+          <p class="modal-card-title has-text-weight-bold is-size-5">Filtros</p>
+          <button
+            id="btn-cerrar-filtros"
+            class="delete is-medium"
+            aria-label="close"
+          ></button>
+        </header>
+
+        <section class="modal-card-body">
+          <div class="field mb-5">
+            <label class="label is-small has-text-grey"
+              >CATEGORÍA PRINCIPAL</label
+            >
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select id="filtro-categoria">
+                  <option value="">Todas las categorías...</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="field mb-5">
+            <label class="label is-small has-text-grey">GÉNERO</label>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select id="filtro-genero" disabled>
+                  <option value="">Selecciona un género...</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="field mb-5">
+            <label class="label is-small has-text-grey">TIPO DE PRODUCTO</label>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select id="filtro-tipo" disabled>
+                  <option value="">Selecciona el tipo...</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer
+          class="modal-card-foot is-radiusless has-background-white is-justify-content-space-between"
+          style="border-top: 1px solid #eee"
+        >
+          <button
+            id="btn-limpiar-filtros"
+            class="button is-ghost has-text-grey"
+          >
+            Limpiar
+          </button>
+          <button
+            id="btn-aplicar-filtros"
+            class="button is-dark has-text-weight-bold is-rounded px-5"
+          >
+            Ver Resultados
+          </button>
+        </footer>
       </div>
     </div>
   </body>

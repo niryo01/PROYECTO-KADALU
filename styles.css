@@ -227,3 +227,34 @@ body {
 .input.kadalu-file::file-selector-button:hover {
   background-color: var(--color-pink-logo);
 }
+
+/* =========================================
+   MODAL LATERAL DE FILTROS (OFFCANVAS)
+   ========================================= */
+
+/* Comportamiento del panel blanco */
+.modal-lateral .modal-card.lateral-panel {
+  margin: 0;
+  max-height: 100vh;
+  height: 100vh;
+  width: 340px; /* Ancho ideal para celulares y PC */
+  max-width: 85vw; /* En celulares muy pequeños, no tapará el 100% de la pantalla */
+  position: absolute;
+  left: 0; /* Aparece desde la izquierda */
+  top: 0;
+  border-radius: 0;
+
+  /* Animación: Inicia fuera de la pantalla (invisible) */
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Cuando JS le agrega la clase 'is-active' de Bulma, entra a la pantalla */
+.modal-lateral.is-active .modal-card.lateral-panel {
+  transform: translateX(0);
+}
+
+/* Pequeño ajuste visual para que el body no haga scroll cuando el modal está abierto */
+html.is-clipped {
+  overflow: hidden !important;
+}

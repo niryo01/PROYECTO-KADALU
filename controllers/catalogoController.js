@@ -1,5 +1,8 @@
 import { obtenerProductos } from "../services/productosService.js";
-import { pintarCatalogoSeccion } from "../views/catalogoView.js";
+import {
+  funcionBotonFiltros,
+  pintarCatalogoSeccion,
+} from "../views/catalogoView.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const contenedorProductos = document.getElementById("contenedor-productos");
@@ -19,4 +22,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("No se pudo cargar inicializar el catálogo:", error);
     contenedorProductos.innerHTML = `<p class="has-text-danger">Hubo un error cargando los productos desde el servidor.</p>`;
   }
+
+  funcionBotonFiltros();
 });
