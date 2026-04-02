@@ -141,3 +141,26 @@ export function obtenerGenerosPorCategoria(categoriaSeleccionada) {
   // Extraemos y retornamos las llaves del nivel 2
   return Object.keys(CATALOGO[categoriaSeleccionada]);
 }
+
+export function obtenerTiposPrendaPorGenero(
+  categoriaSeleccionada,
+  generoSeleccionado,
+) {
+  //Verificamos que la categoria exista en el catálogo para asi evitar errores
+  if (!CATALOGO[categoriaSeleccionada]) {
+    return [];
+  } //si no existe devuelve un array vacio
+
+  // Buscamos el array de prendas para ese el genero especifico (cada genero tiene distintas prendas)
+  const prendas = CATALOGO[categoriaSeleccionada][generoSeleccionado];
+  //OJO: DE esta forma se accede a el nivel 3 del catalogo, y como el nivel 3 son arrays, no objetos
+  //NO DEBEMOS USAR EN ESTE CASO Object.keys(), porque nos daria los indices de los elementos.
+
+  // Si el género existe dentro de esa categoría, retornamos su array contenido
+  // Si no existe, retornamos uno vacio para evitar errores en consola
+  if (prendas) {
+    return prendas;
+  } else {
+    return [];
+  }
+}

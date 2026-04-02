@@ -2,6 +2,7 @@ import {
   categorias,
   obtenerGenerosPorCategoria,
   obtenerProductos,
+  obtenerTiposPrendaPorGenero,
 } from "../services/productosService.js";
 import {
   cargarFiltros,
@@ -29,5 +30,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   funcionBotonFiltros();
-  cargarFiltros(categorias, obtenerGenerosPorCategoria);
+  cargarFiltros(
+    categorias,
+    obtenerGenerosPorCategoria,
+    obtenerTiposPrendaPorGenero,
+  );
 });
