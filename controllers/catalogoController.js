@@ -1,5 +1,10 @@
-import { obtenerProductos } from "../services/productosService.js";
 import {
+  categorias,
+  obtenerGenerosPorCategoria,
+  obtenerProductos,
+} from "../services/productosService.js";
+import {
+  cargarFiltros,
   funcionBotonFiltros,
   pintarCatalogoSeccion,
 } from "../views/catalogoView.js";
@@ -24,4 +29,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   funcionBotonFiltros();
+  cargarFiltros(categorias, obtenerGenerosPorCategoria);
 });

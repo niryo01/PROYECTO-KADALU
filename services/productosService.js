@@ -1,5 +1,9 @@
 // 1. Importamos la DB ya configurada desde nuestro archivo secreto
 import { db, storage } from "../config.js";
+import { CATALOGO } from "../models/categorias.js";
+
+//array con las CATEGORIAS (nivel 1)
+export const categorias = Object.keys(CATALOGO);
 
 // 2. Importamos las funciones de Firestore que necesitamos aquí
 import {
@@ -125,4 +129,15 @@ export async function eliminarProducto(idProducto) {
     console.log(error);
     return false;
   }
+}
+
+//FUNCION PARA OBTENER LOS GENEROS DE UNA CATEGORIA DE PRODUCTO
+export function obtenerGenerosPorCategoria(categoriaSeleccionada) {
+  // si envian un valor vacio no se le envia nada, un array sin nada de contenido
+  if (!categoriaSeleccionada || !CATALOGO[categoriaSeleccionada]) {
+    return [];
+  }
+
+  // Extraemos y retornamos las llaves del nivel 2
+  return Object.keys(CATALOGO[categoriaSeleccionada]);
 }

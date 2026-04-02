@@ -1,6 +1,8 @@
 //---------------------VARIABLES GLOBALES
 
 const modalLateralFiltros = document.getElementById("modal-filtros");
+const filtroCategorias = document.getElementById("filtro-categoria");
+const filtroGeneros = document.getElementById("filtro-genero");
 
 // Función responsable de pintar datos en HTML (Vista Pura)
 export function pintarCatalogoSeccion(productos, contenedorHtml) {
@@ -41,5 +43,38 @@ export function funcionBotonFiltros() {
     } else if (botonCerrarModalFiltros || backgroundCerrarModalFiltros) {
       modalLateralFiltros.classList.remove("is-active");
     }
+  });
+}
+
+export function cargarFiltros(categorias, callbackFuncion) {
+  categorias.forEach((categoriaActual) => {
+    const opciones = document.createElement("option");
+    opciones.value = categoriaActual;
+    opciones.textContent = categoriaActual;
+    filtroCategorias.appendChild(opciones);
+  });
+  filtroCategorias.addEventListener("change", (e) => {
+    const valorSeleccionado = e.target.value;
+    if (valorSeleccionado === "") {
+      filtroGeneros.disabled = true; //deshabilitamos el elemento select
+      filtroGeneros.innerHTML = `<option value="">Selecciona un género...</option>`;
+      return; //esto detiene la funcion de inmediato en este punto
+      //si no estuviera aqui no habria ningun cambio visual, todo seguiria exactamente igual
+      //sin embargo, en memoria aun se estaria ejecutando el codigo de abajo, que seria perdida
+      //ya que como visualmente no se esta renderizado, es un proceso que en ese momento no sirve
+      //con return ahorramos esos 0.00000000000000001kb de memoria
+    }
+    filtroGeneros.disabled = false; //deshabilitamos el elemento select
+
+    const generos = callbackFuncion(valorSeleccionado);
+
+    filtroGeneros.innerHTML = `<option value="">Selecciona un género...</option>`;
+
+    generos.forEach((genero) => {
+      const opcionesGenero = document.createElement("option");
+      opcionesGenero.value = genero;
+      opcionesGenero.textContent = genero;
+      filtroGeneros.appendChild(opcionesGenero);
+    });
   });
 }
