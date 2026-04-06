@@ -63,7 +63,11 @@ export function cargarFiltros(categorias, callbackFuncion, callbackFuncion2) {
     const valorSeleccionado = e.target.value;
 
     // ✅ CORRECCIÓN: También evaluamos "ACCESORIOS" si es que aplica la misma regla para no tener género/tipo
-    if (valorSeleccionado === "" || valorSeleccionado === "ACCESORIOS") {
+    if (
+      valorSeleccionado === "" ||
+      valorSeleccionado === "ACCESORIOS" ||
+      valorSeleccionado === "OUTLET"
+    ) {
       filtroGeneros.disabled = true; //deshabilitamos el elemento select
       filtroGeneros.innerHTML = `<option value="">Selecciona un género...</option>`;
 
@@ -133,5 +137,91 @@ export function cargarFiltros(categorias, callbackFuncion, callbackFuncion2) {
         filtroTipos.appendChild(opcionTipo);
       });
     }
+  });
+}
+
+export function inicializarBotonesFiltro(
+  funcionCallback,
+  contenedorHtml,
+  funcionCallback2,
+) {
+  //------------------------------declaracion de variables para interaccion con el DOM
+  const btnAplicarFiltros = document.getElementById("btn-aplicar-filtros");
+  const btnLimpiarFiltros = document.getElementById("btn-limpiar-filtros");
+  const filtroCategoria = document.getElementById("filtro-categoria");
+  const filtroGenero = document.getElementById("filtro-genero");
+  const filtroTipo = document.getElementById("filtro-tipo");
+  const modalFiltros = document.getElementById("modal-filtros"); //seleccionamos el modal (sera util mas abajo)
+
+  //----------------------EVENTO DEL BOTON PARA APLICAR LOS FILTROS
+  btnAplicarFiltros.addEventListener("click", async () => {
+    // tenemos el objeto que guarda los filtros (por categoria, genero y tipo)
+    const filtrosSeleccionados = {
+      categoria: filtroCategoria.value,
+      genero: filtroGenero.value,
+      tipo: filtroTipo.value,
+    };
+
+    //alerta para UX(dejar en claro que los filtros estan en carga)
+    Swal.fire({
+      title: "Buscando...",
+      text: "Aplicando filtros",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    /* Encerramos en una variable el array obtenido por la funcion encargada en productosService
+  (la referenciamos como funcionCallback para respetar la estructura MVC) y le pasamos como parametro
+  el objeto que contiene los filtros, para que pueda ser convertido en el array que vamos a obtener */
+    const productosEncontrados = await funcionCallback(filtrosSeleccionados);
+
+    /* llamamos e iniciamos inmediatamente a la funcion pintarCatalogoSeccion para que muestre los
+    productos obtenidos de acuerdo a los filtros (estos estan dentro de productosEncontados), y le 
+    pasamos como segundo parametro en que contenedor de la vista se va a dibujar */
+    pintarCatalogoSeccion(productosEncontrados, contenedorHtml);
+
+    Swal.close(); //cerrar el modal de sweet alert
+    modalFiltros.classList.remove("is-active"); //cerrar el modal de filtros
+
+    //como validacion, si no hay productos encontrados para el filtro especifico, lo dejamos en claro
+    if (productosEncontrados.length === 0) {
+      contenedorHtml.innerHTML = `<div class="column is-12 has-text-centered mt-5"><p class="is-size-4 has-text-grey">No se encontraron productos con estos filtros.</p></div>`;
+    }
+  });
+
+  // ----------------------------EVENTO DEL BOTON PARA LIMPIAR LOS FILTROS
+  btnLimpiarFiltros.addEventListener("click", async () => {
+    //eliminamos los filtros de manera visual
+    filtroCategoria.value = "";
+    filtroGenero.value = "";
+    filtroTipo.value = "";
+
+    // tal como estaban en la funcion por defecto "cargarFiltros" volvemos a deshabilitar los selectores de genero y tipo
+    filtroGenero.disabled = true;
+    filtroTipo.disabled = true;
+    filtroGenero.innerHTML = `<option value="">Selecciona un género...</option>`;
+    filtroTipo.innerHTML = `<option value="">Selecciona el tipo...</option>`;
+
+    Swal.fire({
+      title: "Limpiando...",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    /* obtenemos todos los productos de nuevo (el parametro funcionCallback2 
+    sera el slot en donde ira la funcion encargada de eso (desde el controlador) */
+    const productos = await funcionCallback2();
+
+    // Volvemos a pintar el catálogo completo(como la funcion espera 2 parametros, le pasamos los productos y el contenedor donde se pintaran)
+    pintarCatalogoSeccion(productos, contenedorHtml);
+
+    Swal.close(); //cerramos modal
+    modalFiltros.classList.remove("is-active"); //cerramos modal de filtros nuevamente
   });
 }

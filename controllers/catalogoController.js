@@ -2,11 +2,13 @@ import {
   categorias,
   obtenerGenerosPorCategoria,
   obtenerProductos,
+  obtenerProductosFiltrados,
   obtenerTiposPrendaPorGenero,
 } from "../services/productosService.js";
 import {
   cargarFiltros,
   funcionBotonFiltros,
+  inicializarBotonesFiltro,
   pintarCatalogoSeccion,
 } from "../views/catalogoView.js";
 
@@ -29,6 +31,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     contenedorProductos.innerHTML = `<p class="has-text-danger">Hubo un error cargando los productos desde el servidor.</p>`;
   }
 
+  inicializarBotonesFiltro(
+    obtenerProductosFiltrados,
+    contenedorProductos,
+    obtenerProductos,
+  );
   funcionBotonFiltros();
   cargarFiltros(
     categorias,

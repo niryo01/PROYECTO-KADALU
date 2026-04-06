@@ -163,3 +163,40 @@ export function obtenerTiposPrendaPorGenero(
     return [];
   }
 }
+
+export async function obtenerProductosFiltrados(filtros) {
+  try {
+    const referencia = collection(db, "productos");
+    let restricciones = [];
+
+    // 1. Evaluamos qué filtros NO están vacíos y los agregamos a la lista de restricciones
+    if (filtros.categoria !== "") {
+      restricciones.push(where("categoria", "==", filtros.categoria));
+    }
+
+    if (filtros.genero !== "") {
+      restricciones.push(where("genero", "==", filtros.genero));
+    }
+
+    if (filtros.tipo !== "") {
+      restricciones.push(where("tipo", "==", filtros.tipo));
+    }
+
+    // 2. Construimos la consulta final.
+    // El operador spread (...) desempaqueta el array de restricciones y las mete en la función query()
+    const consultaFinal = query(referencia, ...restricciones);
+
+    // 3. Ejecutamos la consulta en Firebase
+    const querySnapshot = await getDocs(consultaFinal);
+
+    const productosFiltrados = [];
+    querySnapshot.forEach((doc) => {
+      productosFiltrados.push({ id: doc.id, ...doc.data() });
+    });
+
+    return productosFiltrados; // Devolvemos el array con los resultados
+  } catch (error) {
+    console.error("Error al filtrar productos:", error);
+    return []; // Si hay error, devolvemos un array vacío para que no explote la página
+  }
+}

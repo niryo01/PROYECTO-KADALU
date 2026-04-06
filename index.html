@@ -18,6 +18,7 @@
       src="controllers/catalogoController.js"
       defer
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
     <section class="kadalu-hero">
@@ -54,23 +55,6 @@
         ></div>
       </div>
     </main>
-
-    <div id="proforma-bar" class="proforma-floating">
-      <div class="proforma-content">
-        <div class="proforma-info">
-          <p class="is-size-7 has-text-grey-light mb-0">Total a pagar</p>
-          <p class="is-size-4 has-text-weight-bold has-text-white mb-0">
-            <span id="monto-total">S/ 0.00</span>
-          </p>
-        </div>
-        <button
-          id="btn-whatsapp"
-          class="button is-kadalu is-rounded has-text-weight-bold shadow-pink"
-        >
-          <span>Pedir (S/ <span id="cantidad-items">0</span>)</span>
-        </button>
-      </div>
-    </div>
 
     <div id="modal-filtros" class="modal modal-lateral">
       <div class="modal-background" id="bg-cerrar-filtros"></div>

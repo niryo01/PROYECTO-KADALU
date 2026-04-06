@@ -19,4 +19,5 @@ export const CATALOGO = {
     ],
   },
   ACCESORIOS: {},
+  OUTLET: {},
 };
