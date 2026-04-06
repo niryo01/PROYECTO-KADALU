@@ -8,7 +8,6 @@ export const CATALOGO = {
       "Vestidos y Enterizos",
       "Pijamas",
     ],
-    UNISEX: ["Polos", "Cafarenas", "Pijamas"],
   },
   CALZADO: {
     HOMBRE: ["Zapatillas Deportivas", "Zapatillas Urbanas", "Botas y Botines"],
@@ -18,6 +17,6 @@ export const CATALOGO = {
       "Sandalias",
       "Botas y Botines",
     ],
-    UNISEX: ["Zapatillas Deportivas", "Zapatillas Urbanas"],
   },
+  ACCESORIOS: {},
 };

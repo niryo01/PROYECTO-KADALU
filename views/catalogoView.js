@@ -61,16 +61,28 @@ export function cargarFiltros(categorias, callbackFuncion, callbackFuncion2) {
   filtroCategorias.addEventListener("change", (e) => {
     //capturamos el valor seleccionado en una variable
     const valorSeleccionado = e.target.value;
-    if (valorSeleccionado === "") {
+
+    // ✅ CORRECCIÓN: También evaluamos "ACCESORIOS" si es que aplica la misma regla para no tener género/tipo
+    if (valorSeleccionado === "" || valorSeleccionado === "ACCESORIOS") {
       filtroGeneros.disabled = true; //deshabilitamos el elemento select
       filtroGeneros.innerHTML = `<option value="">Selecciona un género...</option>`;
+
+      // ✅ CORRECCIÓN: Faltaba limpiar y bloquear también los tipos cuando se borra la categoría
+      filtroTipos.disabled = true;
+      filtroTipos.innerHTML = `<option value="">Selecciona un tipo...</option>`;
+
       return; //esto detiene la funcion de inmediato en este punto
       //si no estuviera aqui no habria ningun cambio visual, todo seguiria exactamente igual
       //sin embargo, en memoria aun se estaria ejecutando el codigo de abajo, que seria perdida
       //ya que como visualmente no se esta renderizado, es un proceso que en ese momento no sirve
       //con return ahorramos esos 0.00000000000000001kb de memoria
     }
-    filtroGeneros.disabled = false; //deshabilitamos el elemento select
+
+    filtroGeneros.disabled = false; //habilitamos el elemento select
+
+    // ✅ CORRECCIÓN: Al cambiar categoría, bloqueamos y limpiamos Tipo hasta que seleccione un nuevo género
+    filtroTipos.disabled = true;
+    filtroTipos.innerHTML = `<option value="">Selecciona un tipo...</option>`;
 
     //atrapamos el array de la funcion "obtenerGenerosPorCategoria" de productoService y le pasamos
     //valorSeleccionado como su parametro (esto hara que por cada seleccion, nos arroje valores
@@ -83,22 +95,27 @@ export function cargarFiltros(categorias, callbackFuncion, callbackFuncion2) {
     filtroGeneros.innerHTML = `<option value="">Selecciona un género...</option>`;
 
     //ahora recorremos el array de generos, se repite lo mismo que con el array de categorias.
-
-    generos.forEach((genero) => {
-      const opcionesGenero = document.createElement("option");
-      opcionesGenero.value = genero;
-      opcionesGenero.textContent = genero;
-      filtroGeneros.appendChild(opcionesGenero);
-    });
+    // ✅ CORRECCIÓN: Programación defensiva (asegurarnos de que es un array válido antes de iterar)
+    if (generos && Array.isArray(generos)) {
+      generos.forEach((genero) => {
+        const opcionesGenero = document.createElement("option");
+        opcionesGenero.value = genero;
+        opcionesGenero.textContent = genero;
+        filtroGeneros.appendChild(opcionesGenero);
+      });
+    }
   });
 
   //-------------------------------------------GENEROS----------------------------------------
   filtroGeneros.addEventListener("change", (e) => {
     const generoSeleccionado = e.target.value;
-    console.log(generoSeleccionado);
     if (generoSeleccionado === "") {
       filtroTipos.disabled = true;
+      // ✅ CORRECCIÓN: Limpiamos los HTML options por si había selecciones previas
+      filtroTipos.innerHTML = `<option value="">Selecciona un tipo...</option>`;
+      return; // ✅ CORRECCIÓN: Faltaba este return! Sin él, la línea de abajo anulaba el disabled
     }
+
     filtroTipos.disabled = false;
 
     const categoriaSeleccionada = filtroCategorias.value;
@@ -107,11 +124,14 @@ export function cargarFiltros(categorias, callbackFuncion, callbackFuncion2) {
 
     filtroTipos.innerHTML = `<option value="">Selecciona un tipo...</option>`;
 
-    tipos.forEach((tipo) => {
-      const opcionTipo = document.createElement("option");
-      opcionTipo.value = tipo;
-      opcionTipo.textContent = tipo;
-      filtroTipos.appendChild(opcionTipo);
-    });
+    // ✅ CORRECCIÓN: Programación defensiva con los Tipos
+    if (tipos && Array.isArray(tipos)) {
+      tipos.forEach((tipo) => {
+        const opcionTipo = document.createElement("option");
+        opcionTipo.value = tipo;
+        opcionTipo.textContent = tipo;
+        filtroTipos.appendChild(opcionTipo);
+      });
+    }
   });
 }

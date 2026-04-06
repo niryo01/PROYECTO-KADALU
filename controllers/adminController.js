@@ -2,10 +2,13 @@ import {
   añadirProductoBaseDatos,
   editarProductoBaseDatos,
   eliminarProducto,
+  obtenerGenerosPorCategoria,
   obtenerProductos,
+  obtenerTiposPrendaPorGenero,
 } from "../services/productosService.js";
 import {
   iniciarModal,
+  obtenerCategoriasFormularioAñadir,
   obtenerDatosFormularioAñadir,
   obtenerDatosFormularioEditar,
   pantallaCargaProductos,
@@ -19,6 +22,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   pintarTabla();
   //funciones
   iniciarModal();
+  obtenerCategoriasFormularioAñadir(
+    obtenerGenerosPorCategoria,
+    obtenerTiposPrendaPorGenero,
+  );
   obtenerDatosFormularioAñadir(añadirProductoBaseDatos);
   pintarTablaProductosAdmin(productos, eliminarProducto);
   obtenerDatosFormularioEditar(editarProductoBaseDatos);

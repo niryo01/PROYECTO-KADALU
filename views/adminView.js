@@ -1,3 +1,5 @@
+import { categorias } from "../services/productosService.js";
+
 //----------------------------------------VARIABLES DEL DOM-------------------------------------------
 
 const botonAbrirModalAñadir = document.getElementById("btn-open-add");
@@ -19,26 +21,13 @@ const añadirStockProducto = document.getElementById("añadir-stock-producto");
 const añadirCategoriaProducto = document.getElementById(
   "añadir-categoria-producto",
 );
-const añadirSubcategoriaProducto = document.getElementById(
-  "añadir-subcategoria-producto",
-);
-const añadirSubSubcategoriaProducto = document.getElementById(
-  "añadir-sub-subcategoria-producto",
-);
+const añadirGeneroProducto = document.getElementById("añadir-genero-producto");
+const añadirTipoProducto = document.getElementById("añadir-tipo-producto");
 
 const editarImagenProducto = document.getElementById("editar-imagen-producto");
 const editarNombreProducto = document.getElementById("editar-nombre-producto");
 const editarPrecioProducto = document.getElementById("editar-precio-producto");
 const editarStockProducto = document.getElementById("editar-stock-producto");
-const editarCategoriaProducto = document.getElementById(
-  "editar-categoria-producto",
-);
-const editarSubcategoriaProducto = document.getElementById(
-  "editar-subcategoria-producto",
-);
-const editarSubSubcategoriaProducto = document.getElementById(
-  "editar-subsubcategoria-producto",
-);
 
 //----------------------------------------------FUNCIONES-----------------------------------------------
 
@@ -66,6 +55,87 @@ export function iniciarModal() {
   });
 }
 
+//Funcion para cargar las categorias , genero y tipo de los productos en el formulario de añadir producto
+export function obtenerCategoriasFormularioAñadir(
+  funcionCallback,
+  funcionCallback2,
+) {
+  // Cargar categorías iniciales
+  categorias.forEach((categoria) => {
+    const categoriaOpcion = document.createElement("option");
+    categoriaOpcion.value = categoria;
+    categoriaOpcion.textContent = categoria;
+    añadirCategoriaProducto.appendChild(categoriaOpcion);
+  });
+
+  // EVENTO 1: CAMBIO DE CATEGORÍA
+  añadirCategoriaProducto.addEventListener("change", function (e) {
+    const categoriaElegida = e.target.value;
+
+    if (categoriaElegida === "" || categoriaElegida === "ACCESORIOS") {
+      console.log("no elegiste nada o elegiste accesorios");
+      añadirGeneroProducto.disabled = true;
+      añadirTipoProducto.disabled = true;
+
+      // CORRECCIÓN: Reseteamos completamente el HTML interno, no solo el value
+      añadirGeneroProducto.innerHTML = `<option value="">Selecciona el genero</option>`;
+      añadirTipoProducto.innerHTML = `<option value="">Selecciona el tipo de producto</option>`;
+    } else {
+      console.log("elegiste " + categoriaElegida);
+
+      // CORRECCIÓN: Solo habilitamos Género. Tipo sigue bloqueado hasta elegir género.
+      añadirGeneroProducto.disabled = false;
+      añadirTipoProducto.disabled = true;
+
+      // Reseteamos el Tipo por si había datos de una selección anterior
+      añadirTipoProducto.innerHTML = `<option value="">Selecciona el tipo de producto</option>`;
+      añadirGeneroProducto.innerHTML = `<option value="">Selecciona el genero de la categoria</option>`;
+
+      const generosProducto = funcionCallback(categoriaElegida);
+
+      // CORRECCIÓN: Validamos que realmente devuelva un array antes de iterar
+      if (generosProducto && Array.isArray(generosProducto)) {
+        generosProducto.forEach((generoProducto) => {
+          const generoProductoOpcion = document.createElement("option");
+          generoProductoOpcion.value = generoProducto;
+          generoProductoOpcion.textContent = generoProducto;
+          añadirGeneroProducto.appendChild(generoProductoOpcion);
+        });
+      }
+    }
+  });
+
+  // EVENTO 2: CAMBIO DE GÉNERO
+  añadirGeneroProducto.addEventListener("change", function (e) {
+    const generoElegido = e.target.value;
+
+    if (generoElegido === "") {
+      console.log("no elegiste nada en genero");
+      añadirTipoProducto.disabled = true;
+      añadirTipoProducto.innerHTML = `<option value="">Selecciona el tipo de producto</option>`;
+    } else {
+      añadirTipoProducto.disabled = false;
+
+      const tiposProducto = funcionCallback2(
+        añadirCategoriaProducto.value,
+        generoElegido,
+      );
+
+      añadirTipoProducto.innerHTML = `<option value="">Selecciona el tipo de producto</option>`;
+
+      // CORRECCIÓN: Validamos el array antes de iterar
+      if (tiposProducto && Array.isArray(tiposProducto)) {
+        tiposProducto.forEach((tipoProducto) => {
+          const tipoProductoOpcion = document.createElement("option");
+          tipoProductoOpcion.value = tipoProducto;
+          tipoProductoOpcion.textContent = tipoProducto;
+          añadirTipoProducto.appendChild(tipoProductoOpcion);
+        });
+      }
+    }
+  });
+}
+
 //funcion para atrapar el formulario y añadir un producto
 export function obtenerDatosFormularioAñadir(funcionCallback) {
   formularioAñadir.addEventListener("submit", async function (e) {
@@ -77,23 +147,19 @@ export function obtenerDatosFormularioAñadir(funcionCallback) {
       precio: Number(añadirPrecioProducto.value),
       categoria: añadirCategoriaProducto.value,
       stock: Number(añadirStockProducto.value),
-      subcategoria: añadirSubcategoriaProducto.value,
     };
 
-    /* PORQUE TENEMOS ESTA CONDICIONAL?
-    Porque todo producto definitivamente tendra una categoria y como minimo una subcategoria (eso es lo esperado y la idea original)
-    pero habra productos que podran tener subsubcategoria extra, es decir , otra categoria dentro
-    de esa subcategoria. Por eso existe esta condicional, si no tendra subsubcategoria,
-    simplemente crea el objeto por defecto completando sus respectivos y ya.
-    Pero en caso si tenga subsubcategoria, añade la variable extra al objeto.
-    Esto nos permite evitar errores de null, que aunque pueden ocurrir, no es lo recomendable permitirlo a nivel de noSQL
-    y en SQL eso seria fatal.
-     */
+    // 2. Condicionas el género y el tipo
+    // Si el input NO está vacío, entonces sí le creas la propiedad al objeto
+    if (añadirGeneroProducto.value !== "") {
+      productoAgregar.genero = añadirGeneroProducto.value;
+    }
 
-    if (añadirSubSubcategoriaProducto.value !== "")
-      productoAgregar.subsubcategoria = añadirSubSubcategoriaProducto.value;
+    if (añadirTipoProducto.value !== "") {
+      productoAgregar.tipo = añadirTipoProducto.value;
+    }
 
-    //con ayuda de la ia
+    //con ayuda de la ia (ALERTA MIENTRAS SE SUBE EL PRODUCTO)
     Swal.fire({
       title: "Cargando",
       text: "Subiendo producto...",
@@ -158,30 +224,41 @@ export function pintarTabla() {
                 <th>Precio (S/)</th>
                 <th>Stock</th>
                 <th>Categoría</th>
-                <th>Sub-categoría</th>
-                <th>Sub-subcategoría</th>
+                <th>Genero</th>
+                <th>Tipo de Producto</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody id="product-table-body"></tbody>
           </table>`;
 }
+
 export function pintarTablaProductosAdmin(listaProductos, funcionEliminar) {
   tablaProductos = document.getElementById("product-table-body");
   //vaciamos la el html para que se vuelva a pintar correctamente
   tablaProductos.innerHTML = "";
   //pintamos el HTML de la tabla
   listaProductos.forEach((producto) => {
-    tablaProductos.innerHTML += `<tr> <td>${producto.id}</td> <td><img src="${producto.img}" 
-    alt="${producto.nombre}" width="100"></td> <td>${producto.nombre}</td> 
-    <td>${producto.precio}</td> <td>${producto.stock}</td> 
-    <td>${producto.categoria}</td> <td>${producto.subcategoria}</td> 
-    <td>${producto.subsubcategoria || "N/A"}</td> 
-    <td class="acciones-seccion"> <button class="button btn-editar is-primary is-small" data-id="${producto.id}">Editar</button> <button class="button btn-eliminar is-danger is-small" data-id="${producto.id}">Eliminar</button> </td>
+    // CORRECCIÓN: Actualizamos subcategoria a genero y subsubcategoria a tipo
+    tablaProductos.innerHTML += `<tr> 
+      <td>${producto.id}</td> 
+      <td><img src="${producto.img}" alt="${producto.nombre}" width="100"></td> 
+      <td>${producto.nombre}</td> 
+      <td>${producto.precio}</td> 
+      <td>${producto.stock}</td> 
+      <td>${producto.categoria}</td> 
+      <td>${producto.genero || "N/A"}</td> 
+      <td>${producto.tipo || "N/A"}</td> 
+      <td class="acciones-seccion"> 
+        <button class="button btn-editar is-primary is-small" data-id="${producto.id}">Editar</button> 
+        <button class="button btn-eliminar is-danger is-small" data-id="${producto.id}">Eliminar</button> 
+      </td>
     </tr>`;
   });
 
   //______requiere explicacion
+  // Clonamos el nodo para eliminar event listeners previos y evitar que se acumulen
+  // eventos click cada vez que se vuelve a pintar la tabla.
   const tablaLimpia = tablaProductos.cloneNode(true);
   tablaProductos.parentNode.replaceChild(tablaLimpia, tablaProductos);
   tablaProductos = tablaLimpia; // <-- ¡AÑADE ESTA LÍNEA!
@@ -201,15 +278,6 @@ export function pintarTablaProductosAdmin(listaProductos, funcionEliminar) {
       editarNombreProducto.value = ProductoSeleccionadoEditar.nombre;
       editarPrecioProducto.value = ProductoSeleccionadoEditar.precio;
       editarStockProducto.value = ProductoSeleccionadoEditar.stock;
-      editarCategoriaProducto.value = ProductoSeleccionadoEditar.categoria;
-      editarSubcategoriaProducto.value =
-        ProductoSeleccionadoEditar.subcategoria;
-      editarSubSubcategoriaProducto.value =
-        ProductoSeleccionadoEditar.subsubcategoria || ""; //si no tiene subsubcategoria, que deje el campo vacio
-      /* Ahora le asignamos el id tambien al formulario, esto porque al ejecutar el evento "submit", el formulario
-      debe saber exactamente que producto esta editando para no confundirse, y para que eso ocurra, debemos
-      asegurarnos que el formulario conoce el ID del producto que esta editando, asi que le asignamos el id
-      con el dataset */
       formularioEditar.dataset.id = idProdSeleccionado;
       //el modal aparece al final para que salga con todos los datos ya cargados
       modalEditar.classList.add("is-active");
@@ -284,13 +352,13 @@ export function obtenerDatosFormularioEditar(funcionCallBack) {
     const idProductoEditar = formularioEditar.dataset.id;
 
     // creamos el nuevo producto esta vez editado, pero que conserva su ID
+    // Como decidiste que no se puede editar la categoría, género ni tipo,
+    // NO los incluimos aquí. El service.js (que actualizaremos a continuación)
+    // solo actualizará estos 3 campos.
     const productoEditado = {
       nombre: editarNombreProducto.value,
       precio: Number(editarPrecioProducto.value),
       stock: Number(editarStockProducto.value),
-      categoria: editarCategoriaProducto.value,
-      subcategoria: editarSubcategoriaProducto.value,
-      subsubcategoria: editarSubSubcategoriaProducto.value || "",
     };
 
     //esta condicional es obligatoria para manejar si es que se subio una nueva imagen

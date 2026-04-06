@@ -83,13 +83,11 @@ export async function editarProductoBaseDatos(idProducto, productoEditado) {
     //ESTA PARTE ES DE LA IA
     // 1. Preparamos un objeto limpio SOLO con los textos.
     // Lo hacemos así porque Firebase se asusta si intentamos mandarle un archivo físico (File) directo a la base de datos de texto.
+    // Como ya no editamos la clasificación, solo enviamos nombre, precio y stock.
     let datosAActualizar = {
       nombre: productoEditado.nombre,
       precio: productoEditado.precio,
       stock: productoEditado.stock,
-      categoria: productoEditado.categoria,
-      subcategoria: productoEditado.subcategoria,
-      subsubcategoria: productoEditado.subsubcategoria,
     };
 
     //que pasa si el usuario subio una foto nueva?
@@ -108,6 +106,7 @@ export async function editarProductoBaseDatos(idProducto, productoEditado) {
     const refProducto = doc(db, "productos", idProducto);
     //actualiza el firebase
     // updateDoc es mágico: Solo reemplaza los campos que le mandas en 'datosAActualizar'.
+    // Los campos de categoría, género y tipo que ya existen en Firebase no se verán afectados.
     // Si NO le mandas el campo 'img' (porque no hubo foto nueva), Firebase deja la foto vieja intacta. ¡Una maravilla!
     await updateDoc(refProducto, datosAActualizar);
 
