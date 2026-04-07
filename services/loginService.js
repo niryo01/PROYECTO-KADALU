@@ -1,37 +1,24 @@
-// 1. Importamos la DB ya configurada desde nuestro archivo secreto
-import { db } from "../config.js";
+// 1. Importamos 'auth' en lugar de (o además de) 'db'
+import { auth } from "../config.js";
 
-// 2. Importamos las funciones de Firestore que necesitamos aquí
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+// 2. Importamos la función de logueo de Auth
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Servicio que únicamente interactúa con DB y devuelve un booleano (Modelo Puro)
-export async function validarCredenciales(
-  usuarioIngresado,
-  contraseñaIngresada,
-) {
+export async function validarCredenciales(emailIngresado, contraseñaIngresada) {
   try {
-    const usuariosReferencia = collection(db, "usuarios");
-    const consulta = query(
-      usuariosReferencia,
-      where("usuario", "==", usuarioIngresado),
-      where("contraseña", "==", contraseñaIngresada),
+    // Intentamos loguear directamente en los servidores de Google
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      emailIngresado,
+      contraseñaIngresada,
     );
 
-    const resultados = await getDocs(consulta);
-
-    // Si está vacío, las credenciales son incorrectas
-    if (resultados.empty) {
-      return false;
-    } else {
-      return true; // Credenciales correctas
-    }
+    // Si llegamos aquí, es porque los datos son correctos
+    console.log("Usuario autenticado:", userCredential.user.uid);
+    return true;
   } catch (error) {
-    console.error("Error al consultar DB para login", error);
-    throw error;
+    // Si falla (contraseña mal, usuario no existe), Firebase lanza un error
+    console.error("Error de autenticación:", error.code);
+    return false; // Retornamos false para que el controlador lo maneje
   }
 }

@@ -14,11 +14,27 @@ async function manejarLogin(usuario, contraseña) {
     } else {
       // Si es False, avisamos al usuario a través de la UI
       console.log("Credenciales inválidas");
-      alert("Usuario o contraseña incorrectos. Inténtalo otra vez.");
+      // Se utiliza SweetAlert2 para una mejor UX al fallar contraseña (Detalle UX/UI)
+      Swal.fire({
+        icon: 'error',
+        title: 'Acceso Denegado',
+        text: 'Usuario o contraseña incorrectos. Inténtalo otra vez.',
+        background: '#1e293b',
+        color: '#ffffff',
+        confirmButtonColor: '#ff66b2'
+      });
     }
   } catch (error) {
     console.error("Fallo durante el login:", error);
-    alert("Hubo un error en la conexión. Inténtalo más tarde.");
+    // Se utiliza SweetAlert2 para mostrar errores de conexión (Detalle UX/UI)
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de Conexión',
+      text: 'Hubo un error en la conexión. Inténtalo más tarde.',
+      background: '#1e293b',
+      color: '#ffffff',
+      confirmButtonColor: '#ff66b2'
+    });
   }
 }
 

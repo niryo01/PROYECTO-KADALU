@@ -49,7 +49,8 @@ export async function obtenerProductos() {
 export async function añadirProductoBaseDatos(producto) {
   try {
     //_______________________PASO 1 : primero debemos guardar la foto fisica en el storage de firebase
-    const refImagen = ref(storage, "productos/" + producto.img.name); //referencia para Storage (la carpeta y el nombre del archivo)
+    const nombreUnico = `${Date.now()}-${producto.img.name}`;
+const refImagen = ref(storage, "productos/" + nombreUnico);
     /* Es como decir:
     Prepárate, porque voy a usar mi disco duro (storage), dentro de la carpeta productos/, 
     y el archivo se llamará exactamente igual que en la PC del usuario (producto.img.name)". */
@@ -92,9 +93,11 @@ export async function editarProductoBaseDatos(idProducto, productoEditado) {
 
     //que pasa si el usuario subio una foto nueva?
     if (productoEditado.imgUpd) {
+      // Generamos un nombre único para evitar colisiones de archivos al editar (Vulnerabilidad #2)
+      const nombreUnico = `${Date.now()}-${productoEditado.imgUpd.name}`;
       const refImagen = ref(
         storage,
-        "productos/" + productoEditado.imgUpd.name,
+        "productos/" + nombreUnico,
       );
       await uploadBytes(refImagen, productoEditado.imgUpd);
       const urlImagen = await getDownloadURL(refImagen);
