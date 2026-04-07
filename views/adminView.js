@@ -73,7 +73,6 @@ export function obtenerCategoriasFormularioAñadir(
     const categoriaElegida = e.target.value;
 
     if (categoriaElegida === "" || categoriaElegida === "ACCESORIOS") {
-      console.log("no elegiste nada o elegiste accesorios");
       añadirGeneroProducto.disabled = true;
       añadirTipoProducto.disabled = true;
 
@@ -81,8 +80,6 @@ export function obtenerCategoriasFormularioAñadir(
       añadirGeneroProducto.innerHTML = `<option value="">Selecciona el genero</option>`;
       añadirTipoProducto.innerHTML = `<option value="">Selecciona el tipo de producto</option>`;
     } else {
-      console.log("elegiste " + categoriaElegida);
-
       // CORRECCIÓN: Solo habilitamos Género. Tipo sigue bloqueado hasta elegir género.
       añadirGeneroProducto.disabled = false;
       añadirTipoProducto.disabled = true;
@@ -110,7 +107,6 @@ export function obtenerCategoriasFormularioAñadir(
     const generoElegido = e.target.value;
 
     if (generoElegido === "") {
-      console.log("no elegiste nada en genero");
       añadirTipoProducto.disabled = true;
       añadirTipoProducto.innerHTML = `<option value="">Selecciona el tipo de producto</option>`;
     } else {
@@ -202,6 +198,13 @@ export function obtenerDatosFormularioAñadir(funcionCallback) {
   });
 }
 
+export function botonCerrarSesion(funcionCallBack) {
+  const botonCerrarSesion = document.getElementById("btn-logout");
+  botonCerrarSesion.addEventListener("click", function () {
+    funcionCallBack();
+  });
+}
+
 export function pantallaCargaProductos() {
   const contenedor = document.querySelector(".table-container");
   contenedor.innerHTML = `
@@ -287,7 +290,6 @@ export function pintarTablaProductosAdmin(listaProductos, funcionEliminar) {
         (p) => p.id == idProdSeleccionado,
       );
 
-      console.log("A punto de eliminar:", ProductoSeleccionadoEliminar);
       Swal.fire({
         title: "Estas seguro?",
         text: "Una vez eliminado el producto no podras deshacer este cambio!",

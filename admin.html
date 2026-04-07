@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Panel de control</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="controllers/adminController.js" defer></script>
     <link
@@ -25,6 +25,12 @@
               <h1 class="title is-3 has-text-white has-text-weight-bold mb-0">
                 Panel de Control
               </h1>
+              <button
+                class="button is-danger is-outlined pl-3 ml-5"
+                id="btn-logout"
+              >
+                Cerrar Sesion
+              </button>
             </div>
           </div>
           <div class="level-right">
@@ -55,7 +61,9 @@
         <section class="modal-card-body">
           <form id="form-add">
             <div class="field">
-              <label class="label is-kadalu">Imagen del Producto</label>
+              <label class="label is-kadalu has-text-white-bis"
+                >Imagen del Producto</label
+              >
               <div class="control">
                 <input
                   class="input is-kadalu kadalu-file"
@@ -67,7 +75,9 @@
             </div>
 
             <div class="field">
-              <label class="label is-kadalu">Nombre del Producto</label>
+              <label class="label is-kadalu has-text-white-bis"
+                >Nombre del Producto</label
+              >
               <div class="control">
                 <input
                   class="input is-kadalu"
@@ -81,7 +91,9 @@
             <div class="columns is-mobile mb-0">
               <div class="column">
                 <div class="field">
-                  <label class="label is-kadalu">Precio (S/)</label>
+                  <label class="label is-kadalu has-text-white-bis"
+                    >Precio (S/)</label
+                  >
                   <div class="control">
                     <input
                       class="input is-kadalu"
@@ -95,7 +107,9 @@
               </div>
               <div class="column">
                 <div class="field">
-                  <label class="label is-kadalu">Stock</label>
+                  <label class="label is-kadalu has-text-white-bis"
+                    >Stock</label
+                  >
                   <div class="control">
                     <input
                       class="input is-kadalu"
@@ -109,7 +123,9 @@
             </div>
 
             <div class="field">
-              <label class="label is-kadalu">Categoría del producto</label>
+              <label class="label is-kadalu has-text-white-bis"
+                >Categoría del producto</label
+              >
               <div class="control">
                 <div class="select is-fullwidth is-kadalu-select">
                   <select id="añadir-categoria-producto">
@@ -120,7 +136,9 @@
             </div>
 
             <div class="field">
-              <label class="label is-kadalu">Genero del producto</label>
+              <label class="label is-kadalu has-text-white-bis"
+                >Genero del producto</label
+              >
               <div class="control">
                 <div class="select is-fullwidth is-kadalu-select">
                   <select disabled id="añadir-genero-producto">
@@ -133,7 +151,9 @@
             </div>
 
             <div class="field">
-              <label class="label is-kadalu">Tipo de Producto</label>
+              <label class="label is-kadalu has-text-white-bis"
+                >Tipo de Producto</label
+              >
               <div class="control">
                 <div class="select is-fullwidth is-kadalu-select">
                   <select disabled id="añadir-tipo-producto">

@@ -71,10 +71,8 @@ const refImagen = ref(storage, "productos/" + nombreUnico);
 
     const referencia = collection(db, "productos");
     const query = await addDoc(referencia, producto);
-    console.log("¡Producto guardado con ID: ", query.id);
     return true; // Le devolvemos un "true" al Controlador para que sepa que terminamos bien
   } catch (error) {
-    console.log("No se pudo añadir producto a la base de datos", error);
     return false;
   }
 }
@@ -115,7 +113,6 @@ export async function editarProductoBaseDatos(idProducto, productoEditado) {
 
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 }
@@ -128,7 +125,6 @@ export async function eliminarProducto(idProducto) {
     await deleteDoc(refProducto);
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 }

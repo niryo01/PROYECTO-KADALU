@@ -14,7 +14,6 @@ export async function validarCredenciales(emailIngresado, contraseñaIngresada) 
     );
 
     // Si llegamos aquí, es porque los datos son correctos
-    console.log("Usuario autenticado:", userCredential.user.uid);
     return true;
   } catch (error) {
     // Si falla (contraseña mal, usuario no existe), Firebase lanza un error

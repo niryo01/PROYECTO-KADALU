@@ -1,6 +1,7 @@
 import { auth } from "../config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { ADMIN_UID } from "../env.js";
+import { logout } from "../services/authService.js";
 import {
   añadirProductoBaseDatos,
   editarProductoBaseDatos,
@@ -10,6 +11,7 @@ import {
   obtenerTiposPrendaPorGenero,
 } from "../services/productosService.js";
 import {
+  botonCerrarSesion,
   iniciarModal,
   obtenerCategoriasFormularioAñadir,
   obtenerDatosFormularioAñadir,
@@ -23,8 +25,6 @@ import {
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     if (user.uid === ADMIN_UID) {
-      console.log("Acceso autorizado. Inicializando panel...");
-
       // SOLO si es el admin, ejecutamos toda la lógica de carga
       await inicializarPanel();
     } else {
@@ -54,6 +54,13 @@ async function inicializarPanel() {
     obtenerDatosFormularioAñadir(añadirProductoBaseDatos);
     pintarTablaProductosAdmin(productos, eliminarProducto);
     obtenerDatosFormularioEditar(editarProductoBaseDatos);
+    botonCerrarSesion(() => {
+      logout()
+        .then(() => {
+          window.location.href = "login.html";
+        })
+        .catch(console.error);
+    });
   } catch (error) {
     console.error("Error al cargar datos del panel:", error);
   }
