@@ -16,8 +16,7 @@ import {
   obtenerCategoriasFormularioAñadir,
   obtenerDatosFormularioAñadir,
   obtenerDatosFormularioEditar,
-  pantallaCargaProductos,
-  pintarTabla,
+  PantallaCargaAdmin,
   pintarTablaProductosAdmin,
 } from "../views/adminView.js";
 
@@ -39,13 +38,11 @@ onAuthStateChanged(auth, async (user) => {
 
 // --- FUNCIÓN QUE ARRANCA TODO EL PANEL ---
 async function inicializarPanel() {
-  pantallaCargaProductos();
-
   try {
+    PantallaCargaAdmin(true);
     const productos = await obtenerProductos();
 
     // Aquí van todas tus funciones que antes estaban en DOMContentLoaded
-    pintarTabla();
     iniciarModal();
     obtenerCategoriasFormularioAñadir(
       obtenerGenerosPorCategoria,
@@ -62,6 +59,13 @@ async function inicializarPanel() {
         .catch(console.error);
     });
   } catch (error) {
-    console.error("Error al cargar datos del panel:", error);
+    console.log(error);
+    Swal.fire({
+      title: "Error de conexión",
+      text: "No se pudieron cargar los productos. Revisa tu internet o intenta más tarde.",
+      icon: "error",
+    });
+  } finally {
+    PantallaCargaAdmin(false);
   }
 }

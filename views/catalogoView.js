@@ -1,17 +1,29 @@
-//---------------------VARIABLES GLOBALES
+//---------------------------------VARIABLES GLOBALES---------------------------------------
 
 const modalLateralFiltros = document.getElementById("modal-filtros");
 const filtroCategorias = document.getElementById("filtro-categoria");
 const filtroGeneros = document.getElementById("filtro-genero");
 const filtroTipos = document.getElementById("filtro-tipo");
 
-// Función responsable de pintar datos en HTML (Vista Pura)
-export function pintarCatalogoSeccion(productos, contenedorHtml) {
-  // Limpiamos contenido previo
-  contenedorHtml.innerHTML = "";
+export function pantallaCarga(mostrar) {
+  //mostrar es el parametro tipo booleano
+  const pantallaDeCarga = document.getElementById("pantalla-carga");
 
+  if (mostrar) {
+    pantallaDeCarga.classList.remove("is-hidden"); // muestra la pantalla de carga
+  } else {
+    pantallaDeCarga.classList.add("is-hidden"); // si es false, la pantalla de carga se oculta
+  }
+}
+
+//-------------------------------FUNCION PARA DIBUJAR LOS PRODUCTOS--------------------------------
+export function pintarCatalogoSeccion(productos, contenedorHtml) {
+  //CODIGO ACTUALIZADO (para ahorrar recursos)
+  //creamos una variable para almacenar el HTML con todos los productos ya obtenidos
+  let productosHtml = "";
+  //Recorremos el array de productos y por cada producto, creamos una tarjeta para cada uno
   productos.forEach((producto) => {
-    contenedorHtml.innerHTML += `
+    productosHtml += `
           <div class="column is-6-mobile is-4-tablet is-3-desktop">
             <div class="card product-card">
               <div class="card-image">
@@ -32,8 +44,18 @@ export function pintarCatalogoSeccion(productos, contenedorHtml) {
             </div>
           </div>`;
   });
-}
+  //Ahora si una vez cargado todos los productos en "productosHtml", recien ahi de frente lo pasamos al contenedor HTML
+  contenedorHtml.innerHTML = productosHtml;
 
+  //ahora recien cargados todos los productos, hacemos visible el boton para filtrarlos.
+  const filtrosProd = document.querySelector(".contenedor-btn-filtros");
+  if (filtrosProd) {
+    filtrosProd.classList.remove("is-hidden");
+  }
+}
+//---------------------------------------------------------------------------------------------
+
+//-----------------------FUNCION PARA ABRIR Y CERRAR EL MODAL DE FILTORS-----------------------
 export function funcionBotonFiltros() {
   document.addEventListener("click", function (e) {
     const botonAbrirModalFiltros = e.target.closest("#btn-abrir-filtros");
@@ -46,7 +68,9 @@ export function funcionBotonFiltros() {
     }
   });
 }
+//---------------------------------------------------------------------------------------------
 
+//------------------------FUNCION PARA CARGAR LOS FILTROS Y ENVIARLOS---------------------
 export function cargarFiltros(categorias, callbackFuncion, callbackFuncion2) {
   //recorremos el array de categorias que se encuentra en productos.Service
   categorias.forEach((categoriaActual) => {
@@ -140,6 +164,9 @@ export function cargarFiltros(categorias, callbackFuncion, callbackFuncion2) {
   });
 }
 
+//---------------------------------------------------------------------------------------------
+
+//-------------------FUNCION QUE DA FUNCIONALIDAD A LOS BOTONES DE FILTRADO-------------------
 export function inicializarBotonesFiltro(
   funcionCallback,
   contenedorHtml,

@@ -76,11 +76,11 @@ export function obtenerCategoriasFormularioAñadir(
       añadirGeneroProducto.disabled = true;
       añadirTipoProducto.disabled = true;
 
-      // CORRECCIÓN: Reseteamos completamente el HTML interno, no solo el value
+      //  reseteamos completamente el HTML interno, no solo el value
       añadirGeneroProducto.innerHTML = `<option value="">Selecciona el genero</option>`;
       añadirTipoProducto.innerHTML = `<option value="">Selecciona el tipo de producto</option>`;
     } else {
-      // CORRECCIÓN: Solo habilitamos Género. Tipo sigue bloqueado hasta elegir género.
+      //habilitamos genero, pero el campo de tipo aun sigue bloqueado
       añadirGeneroProducto.disabled = false;
       añadirTipoProducto.disabled = true;
 
@@ -205,45 +205,30 @@ export function botonCerrarSesion(funcionCallBack) {
   });
 }
 
-export function pantallaCargaProductos() {
-  const contenedor = document.querySelector(".table-container");
-  contenedor.innerHTML = `
-    <div class="has-text-centered p-5">
-      <i class="fas fa-spinner fa-spin is-size-2"></i> 
-      <p class="mt-3 is-size-5">Cargando catálogo de productos...</p>
-    </div>
-  `;
-  contenedor.classList.add("animate__animated", "animate__fadeInUp");
-}
+//funcion identifca que a la de catalogoView.js
+export function PantallaCargaAdmin(mostrar) {
+  const loader = document.getElementById("pantalla-carga-admin");
+  const tabla = document.getElementById("tabla-admin");
 
-export function pintarTabla() {
-  const tablaContenedor = document.querySelector(".table-container");
-  tablaContenedor.innerHTML = `<table class="table is-fullwidth is-striped is-hoverable">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Precio (S/)</th>
-                <th>Stock</th>
-                <th>Categoría</th>
-                <th>Genero</th>
-                <th>Tipo de Producto</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="product-table-body"></tbody>
-          </table>`;
+  if (mostrar) {
+    //si es true , mostrara la pantalla de carga y ocultara la tabla
+    loader.classList.remove("is-hidden");
+    tabla.classList.add("is-hidden");
+  } else {
+    //si es false, oculta la pantalla de carga y mostrara la tabla
+    loader.classList.add("is-hidden");
+    tabla.classList.remove("is-hidden");
+  }
 }
 
 export function pintarTablaProductosAdmin(listaProductos, funcionEliminar) {
-  tablaProductos = document.getElementById("product-table-body");
-  //vaciamos la el html para que se vuelva a pintar correctamente
-  tablaProductos.innerHTML = "";
+  let tablaProductos = document.getElementById("product-table-body");
+
+  let filasTablaProductos = "";
   //pintamos el HTML de la tabla
   listaProductos.forEach((producto) => {
     // CORRECCIÓN: Actualizamos subcategoria a genero y subsubcategoria a tipo
-    tablaProductos.innerHTML += `<tr> 
+    filasTablaProductos += `<tr> 
       <td>${producto.id}</td> 
       <td><img src="${producto.img}" alt="${producto.nombre}" width="100"></td> 
       <td>${producto.nombre}</td> 
@@ -259,15 +244,17 @@ export function pintarTablaProductosAdmin(listaProductos, funcionEliminar) {
     </tr>`;
   });
 
-  //______requiere explicacion
-  // Clonamos el nodo para eliminar event listeners previos y evitar que se acumulen
-  // eventos click cada vez que se vuelve a pintar la tabla.
+  tablaProductos.innerHTML = filasTablaProductos;
+
+  // ______Explicación de tu clonado______
+  // Tu lógica del cloneNode está perfecta para limpiar eventos y que no se dupliquen
+  // los clics al volver a pintar la tabla. La mantenemos tal cual.
   const tablaLimpia = tablaProductos.cloneNode(true);
   tablaProductos.parentNode.replaceChild(tablaLimpia, tablaProductos);
-  tablaProductos = tablaLimpia; // <-- ¡AÑADE ESTA LÍNEA!
-  //____________________________
+  tablaProductos = tablaLimpia;
+  // _____________________________________
 
-  // 3. Le ponemos la oreja nueva a la tabla limpia
+  // Le ponemos la oreja nueva a la tabla limpia
   tablaLimpia.addEventListener("click", function (e) {
     const botonEditar = e.target.closest(".btn-editar");
     const botonEliminar = e.target.closest(".btn-eliminar");

@@ -9,6 +9,7 @@ import {
   cargarFiltros,
   funcionBotonFiltros,
   inicializarBotonesFiltro,
+  pantallaCarga,
   pintarCatalogoSeccion,
 } from "../views/catalogoView.js";
 
@@ -21,14 +22,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    // 1. Pedir al modelo los datos crudos desde Firebase
+    pantallaCarga(true); //llamamos el metodo de la pantalla de carga, le pasamos como parametro true para que se ejecute
+    //  Pedir al modelo los datos crudos desde Firebase
     const productos = await obtenerProductos();
 
-    // 2. Enviar a la vista (UI) los datos para que se rendericen en el contenedor
+    // Enviar a la vista (UI) los datos para que se rendericen en el contenedor
     pintarCatalogoSeccion(productos, contenedorProductos);
   } catch (error) {
     console.error("No se pudo cargar inicializar el catálogo:", error);
     contenedorProductos.innerHTML = `<p class="has-text-danger">Hubo un error cargando los productos desde el servidor.</p>`;
+  } finally {
+    /* El finally es el bloque de codigo que se ejecutara si o si , ya sea si se ejecuto el try o el catch */
+    pantallaCarga(false);
   }
 
   inicializarBotonesFiltro(
