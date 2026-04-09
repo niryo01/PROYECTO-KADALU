@@ -25,7 +25,7 @@ export function pintarCatalogoSeccion(productos, contenedorHtml) {
   productos.forEach((producto) => {
     productosHtml += `
           <div class="column is-6-mobile is-4-tablet is-3-desktop">
-            <div class="card product-card">
+            <div class="card product-card" data-id="${producto.id}">
               <div class="card-image">
                 <figure class="image is-4by5">
                   <img
@@ -53,6 +53,94 @@ export function pintarCatalogoSeccion(productos, contenedorHtml) {
     filtrosProd.classList.remove("is-hidden");
   }
 }
+
+export function modalDetallesProducto(productos) {
+  const contenedorProductos = document.getElementById("contenedor-productos");
+  const contenedorModalDetalleProducto =
+    document.querySelector(".modal-content");
+  const modalDetalleProducto = document.getElementById(
+    "modal-detalle-producto",
+  );
+  const btnCerrarModalDetalleProducto = document.getElementById(
+    "btn-cerrar-detalle-x",
+  );
+  const backgroundModalDetalleProducto =
+    document.getElementById("bg-cerrar-detalle");
+  contenedorProductos.addEventListener("click", (e) => {
+    const cartaSeleccionada = e.target.closest(".product-card"); //le decimos que encuentre el elemento con clase "product-card" ya que ahi esta el dataid
+
+    // Si no hicieron clic en una tarjeta (ej. clic en un espacio en blanco), detenemos la función
+    if (!cartaSeleccionada) return;
+
+    const idProductoCartaSeleccionada = cartaSeleccionada.dataset.id; //extraemos el id del producto seleccionado
+    //buscamos en nuestro array de productos el ID del producto (que coincida con el id de la carta del producto seleccionado)
+    const producto = productos.find(
+      (p) => p.id === idProductoCartaSeleccionada,
+    );
+    console.log(producto);
+    if (producto) {
+      //si el producto fue encontrado
+      contenedorModalDetalleProducto.innerHTML = `<!-- Agregamos max-width y margin auto para hacer todo el modal más pequeño y centrado -->
+      <div class="box is-radiusless p-4" style="border-radius: 12px !important; max-width: 450px; margin: 0 auto;">
+        <div class="columns is-multiline">
+          
+          <!-- ========================================== -->
+          <!--            SECCIÓN DE LA IMAGEN            -->
+          <!-- ========================================== -->
+          <div class="column is-12-mobile is-5-tablet has-text-centered">
+            <!-- Eliminamos la clase is-4by5 que causaba el problema -->
+            <figure class="image is-flex is-justify-content-center">
+              <img
+                src="${producto.img}"
+                alt="${producto.nombre}"
+                style="max-height: 220px; width: auto; object-fit: contain; border-radius: 8px;"
+              />
+            </figure>
+          </div>
+
+          <!-- ========================================== -->
+          <!--           SECCIÓN DE LOS DETALLES          -->
+          <!-- ========================================== -->
+          <div class="column is-12-mobile is-7-tablet is-flex is-flex-direction-column">
+            
+            <!-- Título -->
+            <h2 class="pt-4 title is-4 mb-2 has-text-weight-bold" style="line-height: 1.2;">
+              ${producto.nombre}
+            </h2>
+            
+            <!-- Categoría -->
+            <p class="pt-4 subtitle is-7 has-text-grey mb-3">
+              ${producto.categoria} > ${producto.genero}
+            </p>
+
+            <!-- Precio -->
+            <p class="pt-4 title is-5 mb-4" style="color: var(--color-pink-logo)">
+              S/ ${Number(producto.precio).toFixed(2)}
+            </p>
+
+
+            <!-- Botón Agregar -->
+            <div class="mt-auto">
+              <button class="button is-dark is-fullwidth is-rounded has-text-weight-bold is-small" data-id="${producto.id}">
+                Agregar al pedido
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      </div>`;
+      modalDetalleProducto.classList.add("is-active");
+    }
+  });
+
+  btnCerrarModalDetalleProducto.addEventListener("click", function () {
+    modalDetalleProducto.classList.remove("is-active");
+  });
+  backgroundModalDetalleProducto.addEventListener("click", function () {
+    modalDetalleProducto.classList.remove("is-active");
+  });
+}
+
 //---------------------------------------------------------------------------------------------
 
 //-----------------------FUNCION PARA ABRIR Y CERRAR EL MODAL DE FILTORS-----------------------

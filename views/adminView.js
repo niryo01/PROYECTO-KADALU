@@ -72,7 +72,11 @@ export function obtenerCategoriasFormularioAñadir(
   añadirCategoriaProducto.addEventListener("change", function (e) {
     const categoriaElegida = e.target.value;
 
-    if (categoriaElegida === "" || categoriaElegida === "ACCESORIOS") {
+    if (
+      categoriaElegida === "" ||
+      categoriaElegida === "ACCESORIOS" ||
+      categoriaElegida === "OUTLET"
+    ) {
       añadirGeneroProducto.disabled = true;
       añadirTipoProducto.disabled = true;
 
