@@ -81,7 +81,7 @@ export function modalDetallesProducto(productos) {
     if (producto) {
       //si el producto fue encontrado
       contenedorModalDetalleProducto.innerHTML = `<!-- Agregamos max-width y margin auto para hacer todo el modal más pequeño y centrado -->
-      <div class="box is-radiusless p-4" style="border-radius: 12px !important; max-width: 450px; margin: 0 auto;">
+      <div class="  box is-radiusless p-4" style="border-radius: 12px !important; max-width: 450px; margin: 0 auto;">
         <div class="columns is-multiline">
           
           <!-- ========================================== -->

@@ -280,3 +280,7 @@ body {
 html.is-clipped {
   overflow: hidden !important;
 }
+
+.animate__animated.animate__fadeInUp {
+  animation-duration: 0.3s;
+}
